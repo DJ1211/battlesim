@@ -5,14 +5,15 @@ units = {"eirika":  {
                     "level": 1,
                     "promoted": False,
                     "job": "Lord",
-                    "hp": 16,
-                    "str": 4,
-                    "skl": 8,
-                    "spd": 9,
+                    "available_jobs": ["great lord(f)"],
+                    "hp": 0,
+                    "str": 0,
+                    "skl": 0,
+                    "spd": 0,
                     "lck": 5,
-                    "def": 3,
-                    "res": 1,
-                    "con": 5,
+                    "def": 0,
+                    "res": 0,
+                    "con": 0,
                     "hp_grow": 70,
                     "str_grow": 40,
                     "skl_grow": 60,
@@ -32,14 +33,15 @@ units = {"eirika":  {
                     "level": 1,
                     "promoted": True,
                     "job": "Paladin",
-                    "hp": 30,
-                    "str": 14,
-                    "skl": 13,
-                    "spd": 12,
+                    "available_jobs": None,
+                    "hp": 28,
+                    "str": 13,
+                    "skl": 12,
+                    "spd": 11,
                     "lck": 13,
-                    "def": 11,
-                    "res": 8,
-                    "con": 11,
+                    "def": 9,
+                    "res": 7,
+                    "con": 9,
                     "hp_grow": 90,
                     "str_grow": 50,
                     "skl_grow": 45,
@@ -55,24 +57,70 @@ units = {"eirika":  {
                     }
         }
 
-weapons = {"swords": {
-                     "rapier": 
+weapons = {"rapier": 
                      {
                      "name": "Rapier",
                      "mt": 7,
                      "hit": 95,
                      "crt": 10,
-                     "wt": 5                    
-                     }
+                     "wt": 5,
+                     "type": "sword"                    
                      },
-            
-            "lances": {
-                      "silver_lance": {
+        
+        "silver_lance": {
                       "name": "Silver Lance",
                       "mt": 14,
                       "hit": 75,
                       "crt": 0,
                       "wt": 10,
-                     }
+                      "type": "lance"
                      }
             }
+
+jobs = {"lord(f)": {
+                   "name": "Lord",
+                   "hp": 16,
+                   "str": 4,
+                   "skl": 8,
+                   "spd": 9,
+                   "def": 3,
+                   "res": 1,
+                   "con": 5,
+                   "use_magic": False,
+                   "use_swords_light": True,
+                   "use_axes_dark": False,
+                   "use_lances_anima": False,
+                   "use_bows_staves": False,
+                   },
+                
+        "paladin(m)": {
+                      "name": "Paladin",
+                      "hp": 2,
+                      "str": 1,
+                      "skl": 1,
+                      "spd": 1,
+                      "def": 2,
+                      "res": 1,
+                      "con": 2,
+                      "use_magic": False,
+                      "use_swords_light": True,
+                      "use_axes_dark": False,
+                      "use_lances_anima": True,
+                      "use_bows_staves": False,
+                      },
+        
+        "great lord(f)": {
+                        "name": "Great Lord",
+                        "hp": 4,
+                        "str": 2,
+                        "skl": 2,
+                        "spd": 1,
+                        "def": 3,
+                        "res": 5,
+                        "con": 2,
+                        "use_magic": False,
+                        "use_swords_light": True,
+                        "use_axes_dark": False,
+                        "use_lances_anima": False,
+                        "use_bows_staves": False,
+        }}

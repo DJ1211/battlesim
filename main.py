@@ -1,22 +1,19 @@
 from units import Unit
-from dicts import units, weapons
+from weapons import Weapon
+from jobs import Job
+from dicts import units, weapons, jobs
 import time
 
 def main():
-    unit_1 = Unit(units["eirika"], weapons["swords"]["rapier"])
-    unit_2 = Unit(units["seth"], weapons["lances"]["silver_lance"])
+    unit_1 = Unit(units["eirika"], Weapon(weapons["rapier"]), Job(jobs["lord(f)"]))
+    unit_2 = Unit(units["seth"], Weapon(weapons["silver_lance"]), Job(jobs["paladin(m)"]))
     target_level_1 = 20
-    target_level_2 = 10
-
-    print(f"Setting {unit_1.name} to level {target_level_1}\n")
+    target_level_2 = 20
+ 
     unit_1.set_level(target_level_1)
-    print("\n")
-    time.sleep(5)
-    print(f"Setting {unit_2.name} to level {target_level_2}\n")
+    unit_1.promote(0)
+    unit_1.set_level(target_level_1)
     unit_2.set_level(target_level_2)
-    print("\n")
-    time.sleep(5)
     unit_1.battle(unit_2)
-
 
 main()
