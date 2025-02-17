@@ -1,10 +1,12 @@
 from dicts import units, weapons, jobs
+from weapons import Weapon
 from jobs import Job
+from terrain import Terrain
 import random
 import time
 
 class Unit:
-    def __init__(self, unit, weapon, job):
+    def __init__(self, unit):
         self.name = unit["name"]
         self.level = unit["level"]
         self.promoted = unit["promoted"]
@@ -24,19 +26,33 @@ class Unit:
         self.lck_grow = unit["lck_grow"]
         self.def_grow = unit["def_grow"]
         self.res_grow = unit["res_grow"]
-        self.weapon = weapon
-        self.job = job
+        self.weapon = None
+        self.job = None
+        self.terrain = None
+    
+    def assign_job(self, job):
+        self.job = Job(job)
         self.job.apply_stats(self)
+
+    def assign_weapon(self, weapon):
+        unit_weapon = Weapon(weapon)
+        if unit_weapon.type in self.job.weapon_types:
+            self.weapon = Weapon(weapon)
+        else:
+            print("Invalid Weapon")
+
+    def assign_terrain(self, terrain):
+        self.terrain = Terrain(terrain)
     
     def attack(self, target):
-        #  Terrain & weapon triangle to add
+        #  Terrain to add
         if self.calculate_hit(target):
             damage = (self.str + self.weapon.mt)
 
-            if self.job.use_magic == False:
-                damage -= target.defence # - Terrain
+            if self.weapon.magic == False:
+                damage -= target.defence - target.terrain.def_bonus
             else:
-                damage -= target.res # - Terrain
+                damage -= target.res - target.terrain.def_bonus
 
             if self.calculate_critical():
                 print("Critical Hit!")
@@ -55,12 +71,12 @@ class Unit:
         print("Miss!")
     
     def calculate_hit(self, target):
-        # No support bonus to be considered. Weapon triangle currently 0 until implemented
+        # No support bonus to be considered
         base_hit_rate = self.weapon.hit + (self.skl * 2) + (self.lck // 2)
         target_attack_speed = target.calculate_attack_speed()
         
         # Terrain to be added later
-        avoid_rate = (target_attack_speed * 2) + target.lck # + Terrain
+        avoid_rate = (target_attack_speed * 2) + target.lck + target.terrain.avoid
 
         hit_rate = base_hit_rate - avoid_rate
         hit_value = self.rng()
@@ -93,7 +109,12 @@ class Unit:
     def battle(self, target):
         # Calculate weapon advantage
         self.weapon.calculate_weapon_triangle(target.weapon)
-        target.weapon.calculate_weapon_triangle(self.weapon)
+        print(f"{self.weapon.type}")
+        print(f"{target.weapon.type}")
+
+        # Calculate effective damage (e.g. bows vs flying)
+        self.weapon.calculate_effective_damage(target.job)
+        target.weapon.calculate_effective_damage(self.job)
 
         # Calculate speed for accuracy & double strike used in attack
         attack_speed = self.calculate_attack_speed()
@@ -166,32 +187,53 @@ class Unit:
             res_chance = self.rng()
             
             if hp_chance < self.hp_grow:
-                hp_counter += 1
                 self.hp += 1
+                if self.hp > self.job.hp_cap:
+                    self.hp = self.job.hp_cap
+                else:
+                    hp_counter += 1
             
             if str_chance < self.str_grow:
-                str_counter += 1
                 self.str += 1
+                if self.str > self.job.str_cap:
+                    self.str = self.job.str_cap
+                else:
+                    str_counter += 1
             
             if skl_chance < self.skl_grow:
-                skl_counter += 1
                 self.skl += 1
+                if self.skl > self.job.skl_cap:
+                    self.skl = self.job.skl_cap
+                else:
+                    skl_counter += 1
 
             if spd_chance < self.spd_grow:
-                spd_counter += 1
                 self.spd += 1
+                if self.spd > self.job.spd_cap:
+                    self.spd = self.job.spd_cap
+                else:
+                    spd_counter += 1
             
             if lck_chance < self.lck_grow:
-                lck_counter += 1
                 self.lck += 1
+                if self.lck > self.job.lck_cap:
+                    self.lck = self.job.lck_cap
+                else:
+                    lck_counter += 1
             
             if def_chance < self.def_grow:
-                def_counter += 1
                 self.defence += 1
+                if self.defence > self.job.def_cap:
+                    self.defence = self.job.def_cap
+                else:
+                    def_counter += 1
             
             if res_chance < self.res_grow:
-                res_counter += 1
                 self.res += 1
+                if self.res > self.job.res_cap:
+                    self.res = self.job.res_cap
+                else:
+                    res_counter += 1
         
         print(f"HP +{hp_counter}")
         print(f"Str +{str_counter}")

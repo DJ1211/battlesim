@@ -21,11 +21,6 @@ units = {"eirika":  {
                     "lck_grow": 60,
                     "def_grow": 30,
                     "res_grow": 30,
-                    "use_magic": False,
-                    "use_swords_light": True,
-                    "use_axes_dark": False,
-                    "use_lances_anima": False,
-                    "use_bows_staves": False,
                     },
         
         "seth":     {
@@ -49,11 +44,6 @@ units = {"eirika":  {
                     "lck_grow": 25,
                     "def_grow": 40,
                     "res_grow": 30,
-                    "use_magic": False,
-                    "use_swords_light": True,
-                    "use_axes_dark": False,
-                    "use_lances_anima": True,
-                    "use_bows_staves": False,
                     }
         }
 
@@ -64,7 +54,10 @@ weapons = {"rapier":
                      "hit": 95,
                      "crt": 10,
                      "wt": 5,
-                     "type": "sword"                    
+                     "type": "sword",
+                     "effective_against": "cavalry, armour",
+                     "magic": False,
+                     "invert_triangle": False
                      },
         
         "silver_lance": {
@@ -73,7 +66,10 @@ weapons = {"rapier":
                       "hit": 75,
                       "crt": 0,
                       "wt": 10,
-                      "type": "lance"
+                      "type": "lance",
+                      "effective_against": None,
+                      "magic": False,
+                      "invert_triangle": True
                      }
             }
 
@@ -86,11 +82,17 @@ jobs = {"lord(f)": {
                    "def": 3,
                    "res": 1,
                    "con": 5,
-                   "use_magic": False,
-                   "use_swords_light": True,
-                   "use_axes_dark": False,
-                   "use_lances_anima": False,
-                   "use_bows_staves": False,
+                   "hp_cap": 60,
+                   "str_cap": 20,
+                   "skl_cap": 20,
+                   "spd_cap": 20,
+                   "lck_cap": 30,
+                   "def_cap": 20,
+                   "res_cap": 20,
+                   "weapon_types": "sword",
+                   "class_skill": None,
+                   "type_1": None,
+                   "type_2": None
                    },
                 
         "paladin(m)": {
@@ -102,11 +104,17 @@ jobs = {"lord(f)": {
                       "def": 2,
                       "res": 1,
                       "con": 2,
-                      "use_magic": False,
-                      "use_swords_light": True,
-                      "use_axes_dark": False,
-                      "use_lances_anima": True,
-                      "use_bows_staves": False,
+                      "hp_cap": 60,
+                      "str_cap": 25,
+                      "skl_cap": 26,
+                      "spd_cap": 24,
+                      "lck_cap": 30,
+                      "def_cap": 25,
+                      "res_cap": 25,
+                      "weapon_types": "sword, lance",
+                      "class_skill": None,
+                      "type_1": "cavalry",
+                      "type_2": None
                       },
         
         "great lord(f)": {
@@ -118,9 +126,29 @@ jobs = {"lord(f)": {
                         "def": 3,
                         "res": 5,
                         "con": 2,
-                        "use_magic": False,
-                        "use_swords_light": True,
-                        "use_axes_dark": False,
-                        "use_lances_anima": False,
-                        "use_bows_staves": False,
-        }}
+                        "hp_cap": 60,
+                        "str_cap": 24,
+                        "skl_cap": 29,
+                        "spd_cap": 30,
+                        "lck_cap": 30,
+                        "def_cap": 22,
+                        "res_cap": 25,
+                        "weapon_types": "sword",
+                        "class_skill": None,
+                        "type_1": "Cavalry",
+                        "type_2": None
+                        }
+        }
+
+terrain = {"plain": {
+                    "name": "Plain",
+                    "avoid": 0,
+                    "def_bonus": 0
+                    },
+
+           "forest": {
+                     "name": "Forest",
+                     "avoid": 20,
+                     "def_bonus": 1
+                     }
+        }

@@ -10,11 +10,16 @@ class Job:
         self.defence = job["def"]
         self.res = job["res"]
         self.con = job["con"]
-        self.use_magic = job["use_magic"]
-        self.use_swords_light = job["use_swords_light"]
-        self.use_axes_dark = job["use_axes_dark"]
-        self.use_laces_anima = job["use_lances_anima"]
-        self.use_bows_staves = job["use_bows_staves"]
+        self.hp_cap = job["hp_cap"]
+        self.str_cap = job["str_cap"]
+        self.skl_cap = job["skl_cap"]
+        self.spd_cap = job["spd_cap"]
+        self.lck_cap = job["lck_cap"]
+        self.def_cap = job["def_cap"]
+        self.res_cap = job["res_cap"]
+        self.weapon_types = job["weapon_types"]
+        self.type_1 = job["type_1"]
+        self.type_2 = job["type_2"]
     
     def apply_stats(self, unit):
         # Applies class base stats to unit

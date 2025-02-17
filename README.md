@@ -16,7 +16,6 @@ This allows for more customisation as can more easily play with units in classes
 Stats currently uncapped so units can get very strong. Caps to be added later as not a priority
 
 TBD:
-Effective damage
-Crit bonus
+Class skills e.g. Swordmaster crit bonus
 Terrain bonus
 Special effects (e.g. reverse traingle advantage on -slayer weapons)
