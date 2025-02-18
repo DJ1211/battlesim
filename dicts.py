@@ -1,144 +1,46 @@
 # Dictionaries to use for testing. Once basics are sorted, import from CSV?
 
-units = {"eirika":  {
-                    "name": "Eirika",
-                    "level": 1,
-                    "promoted": False,
-                    "job": "Lord",
-                    "available_jobs": ["great lord(f)"],
-                    "hp": 0,
-                    "str": 0,
-                    "skl": 0,
-                    "spd": 0,
-                    "lck": 5,
-                    "def": 0,
-                    "res": 0,
-                    "con": 0,
-                    "hp_grow": 70,
-                    "str_grow": 40,
-                    "skl_grow": 60,
-                    "spd_grow": 60,
-                    "lck_grow": 60,
-                    "def_grow": 30,
-                    "res_grow": 30,
-                    },
-        
-        "seth":     {
-                    "name": "Seth",
-                    "level": 1,
-                    "promoted": True,
-                    "job": "Paladin",
-                    "available_jobs": None,
-                    "hp": 28,
-                    "str": 13,
-                    "skl": 12,
-                    "spd": 11,
-                    "lck": 13,
-                    "def": 9,
-                    "res": 7,
-                    "con": 9,
-                    "hp_grow": 90,
-                    "str_grow": 50,
-                    "skl_grow": 45,
-                    "spd_grow": 45,
-                    "lck_grow": 25,
-                    "def_grow": 40,
-                    "res_grow": 30,
-                    }
-        }
+import os
+import csv
+path = "./stat_sheets/weapons.csv"
 
-weapons = {"rapier": 
-                     {
-                     "name": "Rapier",
-                     "mt": 7,
-                     "hit": 95,
-                     "crt": 10,
-                     "wt": 5,
-                     "type": "sword",
-                     "effective_against": "cavalry, armour",
-                     "magic": False,
-                     "invert_triangle": False
-                     },
-        
-        "silver_lance": {
-                      "name": "Silver Lance",
-                      "mt": 14,
-                      "hit": 75,
-                      "crt": 0,
-                      "wt": 10,
-                      "type": "lance",
-                      "effective_against": None,
-                      "magic": False,
-                      "invert_triangle": True
-                     }
-            }
+weapons = {}
+units = {}
+jobs = {}
 
-jobs = {"lord(f)": {
-                   "name": "Lord",
-                   "hp": 16,
-                   "str": 4,
-                   "skl": 8,
-                   "spd": 9,
-                   "def": 3,
-                   "res": 1,
-                   "con": 5,
-                   "hp_cap": 60,
-                   "str_cap": 20,
-                   "skl_cap": 20,
-                   "spd_cap": 20,
-                   "lck_cap": 30,
-                   "def_cap": 20,
-                   "res_cap": 20,
-                   "weapon_types": "sword",
-                   "class_skill": None,
-                   "type_1": None,
-                   "type_2": None
-                   },
-                
-        "paladin(m)": {
-                      "name": "Paladin",
-                      "hp": 2,
-                      "str": 1,
-                      "skl": 1,
-                      "spd": 1,
-                      "def": 2,
-                      "res": 1,
-                      "con": 2,
-                      "hp_cap": 60,
-                      "str_cap": 25,
-                      "skl_cap": 26,
-                      "spd_cap": 24,
-                      "lck_cap": 30,
-                      "def_cap": 25,
-                      "res_cap": 25,
-                      "weapon_types": "sword, lance",
-                      "class_skill": None,
-                      "type_1": "cavalry",
-                      "type_2": None
-                      },
-        
-        "great lord(f)": {
-                        "name": "Great Lord",
-                        "hp": 4,
-                        "str": 2,
-                        "skl": 2,
-                        "spd": 1,
-                        "def": 3,
-                        "res": 5,
-                        "con": 2,
-                        "hp_cap": 60,
-                        "str_cap": 24,
-                        "skl_cap": 29,
-                        "spd_cap": 30,
-                        "lck_cap": 30,
-                        "def_cap": 22,
-                        "res_cap": 25,
-                        "weapon_types": "sword",
-                        "class_skill": None,
-                        "type_1": "Cavalry",
-                        "type_2": None
-                        }
-        }
+with open ("./stat_sheets/weapons.csv", newline='') as weaponscsv:
+    reader = csv.DictReader(weaponscsv)
+    for row in reader:
+        k = row["name"]
+        v = row
+        if v["effective_against"] != "None":
+            v["effective_against"] = v["effective_against"].split(", ")
+        if v["other_effect"] != "None":
+            v["other_effect"] = v["other_effect"].split(", ")
+        weapons[k] = v
+
+with open ("./stat_sheets/units.csv", newline='') as unitscsv:
+    reader = csv.DictReader(unitscsv)
+    for row in reader:
+        k = row["name"]
+        v = row
+        units[k] = v
+
+with open ("./stat_sheets/jobs.csv", newline='') as jobscsv:
+    reader = csv.DictReader(jobscsv)
+    for row in reader:
+        k = row["name"]
+        v = row
+        if v["weapon_types"] != "None":
+            v["weapon_types"] = v["weapon_types"].split(", ")
+        if v["available_jobs"] != "None":
+            v["available_jobs"] = v["available_jobs"].split(", ")
+        jobs[k] = v
+
+
+
+
+
 
 terrain = {"plain": {
                     "name": "Plain",

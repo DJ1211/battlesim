@@ -1,0 +1,101 @@
+name,hp,str,skl,spd,def,res,con,hp_cap,str_cap,skl_cap,spd_cap,lck_cap,def_cap,res_cap,weapon_types,class_skill,type_1,type_2,available_jobs
+Lord (M),18,6,6,7,6,0,8,60,20,20,20,30,20,20,lance,None,None,None,Great Lord (M)
+Lord (F),16,4,8,9,3,1,5,60,20,20,20,30,20,20,sword,None,sword,None,Great Lord (F)
+Great Lord (M),4,2,3,2,2,5,2,60,27,26,24,30,23,23,lance,None,Cavalry,None,None
+Great Lord (F),4,2,2,1,3,5,2,60,24,29,30,30,22,25,sword,None,Cavalry,sword,None
+Dancer,14,1,2,7,0,1,4,60,10,10,30,30,24,26,anima,None,None,None,None
+Soldier,20,3,0,1,0,0,6,60,20,20,20,30,20,20,lance,None,None,None,None
+Cavalier (M),20,5,2,5,6,0,9,60,20,20,20,30,20,20,"sword, lance",None,Cavalry,None,"Paladin (M), Great Knight (M)"
+Cavalier (F),18,5,3,3,6,0,9,60,20,20,20,30,20,20,"sword, lance",None,Cavalry,None,"Paladin (F), Great Knight (F)"
+Paladin (M),2,1,1,1,2,1,2,60,25,26,24,30,25,25,"sword, lance",None,Cavalry,None,None
+Paladin (F),1,1,1,2,1,2,0,60,23,27,25,30,24,26,"sword, lance",None,Cavalry,None,None
+Great Knight (M),3,2,1,2,2,1,4,60,28,24,24,30,29,25,"sword, lance, axe",None,Cavalry,Armour,None
+Great Knight (F),3,1,1,2,2,2,1,60,26,26,25,30,28,26,"sword, lance, axe",None,Cavalry,Armour,None
+Knight (M),17,5,2,0,9,0,13,60,20,20,20,30,20,20,lance,None,Armour,None,"General (M), Great Knight (M)"
+Knight (F),16,4,3,1,8,1,10,60,20,20,20,30,20,20,lance,None,Armour,None,"General (F), Great Knight (F)"
+General (M),4,2,2,3,2,3,2,60,29,27,24,30,30,25,"sword, lance, axe",None,Armour,None,None
+General (F),3,2,3,2,3,3,1,60,27,28,25,30,29,26,"sword, lance, axe",None,Armour,None,None
+Mercenary (M),18,4,8,8,4,0,9,60,20,20,20,30,20,20,sword,None,sword,None,"Hero (M), Ranger (M)"
+Mercenary (F),16,3,5,6,2,0,8,60,20,20,20,30,20,20,sword,None,sword,None,"Hero (F), Ranger (F)"
+Hero (M),4,1,2,2,2,2,2,60,25,30,26,30,25,22,"sword, axe",None,sword,None,None
+Hero (F),4,1,2,2,2,2,2,60,24,30,26,30,24,24,"sword, axe",None,sword,None,None
+Myrmidon (M),16,4,9,9,2,0,8,60,20,20,20,30,20,20,sword,None,sword,None,"Swordmaster (M), Assassin (M)"
+Myrmidon (F),15,3,9,10,1,1,5,60,20,20,20,30,20,20,sword,None,sword,None,"Swordmaster (F), Assassin (F)"
+Swordmaster (M),5,2,0,0,2,1,1,60,24,29,30,30,22,23,sword,None,sword,None,None
+Swordmaster (F),4,2,1,0,2,1,2,60,22,29,30,30,22,25,sword,None,sword,None,None
+Assassin (M),3,1,0,0,2,2,2,60,20,30,30,30,20,20,sword,None,sword,None,None
+Assassin (F),2,1,1,1,2,1,1,60,20,30,30,30,20,20,sword,None,sword,None,None
+Thief,16,3,1,9,2,0,6,60,20,20,20,30,20,20,sword,None,sword,None,"Rogue, Assassin (M)"
+Rogue,2,1,1,0,2,2,1,60,20,30,30,30,20,20,sword,None,sword,None,None
+Archer (M),18,4,3,3,3,0,7,60,20,20,20,30,20,20,bow,None,None,None,"Sniper (M), Ranger (M)"
+Archer (F),17,3,3,4,3,0,5,60,20,20,20,30,20,20,bow,None,None,None,"Sniper (F), Ranger (F)"
+Sniper (M),3,1,2,2,2,3,1,60,25,30,28,30,25,23,bow,None,None,None,None
+Sniper (F),4,3,1,1,2,2,1,60,24,30,29,30,24,24,bow,None,None,None,None
+Ranger (M),3,2,1,1,3,3,0,60,25,28,30,30,24,23,"sword, bow",None,Cavalry,None,None
+Ranger (F),2,2,2,1,3,3,3,60,23,28,30,30,22,25,"sword, bow",None,Cavalry,None,None
+Wyvern Rider (M),20,7,3,5,8,0,10,60,20,20,20,30,20,20,lance,None,Flying,Dragon,"Wyvern Lord (M), Wyvern Knight (M)"
+Wyvern Rider (F),19,6,5,5,7,0,9,60,20,20,20,30,20,20,lance,None,Flying,Dragon,"Wyvern Lord (F), Wyvern Knight (F)"
+Wyvern Lord (M),4,2,2,0,2,0,1,60,27,25,23,30,28,22,"sword, lance",None,Flying,Dragon,None
+Wyvern Lord (F),4,2,2,0,2,0,1,60,25,26,24,30,27,23,"sword, lance",None,Flying,Dragon,None
+Wyvern Knight (M),3,1,2,3,0,1,0,60,25,26,28,30,24,22,lance,None,Flying,Dragon,None
+Wyvern Knight (F),3,2,1,2,1,1,4,60,24,27,29,30,23,23,lance,None,Flying,Dragon,None
+Mage (M),16,1,2,3,3,3,5,60,20,20,20,30,20,20,anima,None,None,None,"Sage (M), Mage Knight (M)"
+Mage (F),16,1,3,2,2,4,3,60,20,20,20,30,20,20,anima,None,None,None,"Sage (F), Mage Knight (F)"
+Sage (M),4,1,0,0,3,3,1,60,28,30,26,30,21,25,"anima, light",None,None,None,None
+Sage (F),3,1,1,0,3,3,1,60,30,28,26,30,21,25,"anima, light",None,None,None,None
+Mage Knight (M),4,2,0,0,2,2,2,60,24,26,25,30,24,25,anima,None,Cavalry,None,None
+Mage Knight (F),3,2,1,0,2,2,3,60,25,24,25,30,24,28,anima,None,Cavalry,None,None
+Monk,18,1,1,2,1,5,6,60,20,20,20,30,20,20,light,None,None,None,"Bishop (M), Sage (M)"
+Priest,18,1,1,2,1,5,5,60,20,20,20,30,20,20,light,None,None,None,"Bishop (M), Sage (M)"
+Cleric,16,1,2,2,0,6,4,60,20,20,20,30,20,20,light,None,None,None,"Bishop (F), Valkyrie"
+Bishop (M),3,2,1,0,3,2,2,60,25,26,24,30,22,30,light,None,None,None,None
+Bishop (F),3,1,2,1,2,2,1,60,25,25,26,30,21,30,light,None,None,None,None
+Shaman (M),16,2,1,2,2,4,7,60,20,20,20,30,20,20,dark,None,None,None,"Druid (M), Summoner (M)"
+Shaman (F),15,3,1,1,1,5,3,60,20,20,20,30,20,20,dark,None,None,None,"Druid (F), Summoner (F)"
+Druid (M),4,0,0,3,2,2,1,60,29,26,26,30,21,28,"anima, dark",None,None,None,None
+Druid (F),4,0,0,3,2,2,1,60,29,26,26,30,20,29,"anima, dark",None,None,None,None
+Summoner (M),3,0,1,3,1,3,1,60,27,27,26,30,20,28,dark,None,None,None,None
+Summoner (F),3,0,1,3,1,3,1,60,27,27,26,30,20,28,dark,None,None,None,None
+Journeyman (1),14,3,0,1,1,0,8,60,20,20,20,30,20,20,axe,None,None,None,Journeyman (2)
+Journeyman (2),2,0,2,0,2,2,0,60,20,20,20,30,20,20,axe,None,None,None,"Journeyman (3), Hero"
+Journeyman (3),4,1,2,2,2,2,0,60,26,29,28,30,23,23,axe,None,None,None,None
+Recruit (1),13,3,0,1,0,1,6,60,20,20,20,30,20,20,lance,None,None,None,"Recruit (2), "
+Recruit (2),2,1,1,1,2,1,0,60,20,20,20,30,20,20,lance,None,None,None,"Recruit (3), Paladin (F)"
+Recruit (3),2,1,1,1,2,1,2,60,23,30,29,30,22,26,lance,None,None,None,None
+Pupil (1),13,1,0,1,0,3,5,60,20,20,20,30,20,20,anima,None,None,None,"Pupil (2), "
+Pupil (2),2,1,1,0,2,2,0,60,20,20,20,30,20,20,anima,None,None,None,"Pupil (2), Sage (M)"
+Pupil (3),4,2,0,1,3,3,0,60,29,28,27,30,21,26,anima,None,None,None,None
+Manakete (M),20,0,0,2,1,1,25,60,20,20,20,30,20,20,stone,None,Flying,Dragon,None
+Manakete (F),12,0,0,2,2,2,5,60,20,20,20,30,20,20,stone,None,Flying,Dragon,None
+Fighter,20,5,2,4,2,0,11,60,20,20,20,30,20,20,axe,None,None,None,"Warrior, Hero (M)"
+Warrior,3,1,2,0,3,3,2,60,30,28,26,30,26,22,"axe, bow",None,None,None,None
+Brigand,20,5,1,5,3,0,12,60,20,20,20,30,20,20,axe,None,None,None,None
+Pirate,19,4,2,6,3,0,10,60,20,20,20,30,20,20,axe,None,None,None,"Berserker, Warrior (M)"
+Berserker,4,1,1,1,2,2,3,60,30,29,28,30,23,21,axe,None,None,None,None
+Pegasus Knight,14,4,5,5,3,2,5,60,20,20,20,30,20,20,lance,None,Flying,None,"Falcoknight, Wyvern Knight (F)"
+Falcoknight,5,2,0,2,2,2,1,60,23,25,28,30,23,26,"sword, lance",None,Flying,None,None
+Troubadour,15,1,1,3,2,5,5,60,20,20,20,30,20,20,light,None,Cavalry,None,"Valkyrie, Mage Knight (F)"
+Valkyrie,3,2,1,0,2,3,2,60,25,24,25,30,24,28,light,None,Cavalry,None,None
+Necromancer,18,9,4,5,3,8,7,60,30,25,25,30,30,30,dark,None,None,None,None
+Fleet,19,1,1,2,5,0,25,60,20,20,20,30,30,20,bow,None,None,None,None
+Phantom,1,5,2,4,0,0,11,60,20,20,20,30,0,0,axe,None,None,None,None
+Revenant,25,2,0,0,0,0,6,60,20,20,20,30,20,20,monster,None,Monster,None,Entombed
+Entombed,35,3,0,1,0,0,6,60,25,22,21,30,24,22,monster,None,Monster,None,None
+Bonewalker (Sw/Ln),20,4,2,3,3,0,7,60,20,20,20,30,20,20,"sword, lance",None,Monster,None,Wight (Sword/Lance)
+Bonewalker (Bow),18,4,3,2,3,0,6,60,20,20,20,30,20,20,bow,None,Monster,None,Wight (Bow)
+Wight (Sword/Lance),21,7,5,6,5,2,9,60,24,28,26,30,22,23,"sword, lance",None,Monster,None,None
+Wight (Bow),21,6,6,5,5,2,8,60,25,30,28,30,25,23,bow,None,Monster,None,None
+Bael,25,6,3,3,6,1,12,60,30,28,26,30,26,22,monster,None,Monster,None,Elder Bael
+Elder Bael,36,8,5,5,9,4,15,60,30,28,26,30,26,22,monster,None,Monster,None,None
+Cyclops,40,8,5,6,13,0,16,60,29,29,28,30,30,25,axe,None,Monster,None,None
+Mauthe Doog,16,4,10,10,2,0,6,60,20,20,20,30,20,20,monster,None,Monster,None,Gwyllgi
+Gwyllgi,21,6,12,12,5,2,8,60,24,29,30,30,22,23,monster,None,Monster,None,None
+Tarvos,21,6,2,5,7,0,10,60,20,20,20,30,20,20,axe,None,Monster,Cavalry,Maelduin
+Maelduin,25,8,4,7,9,3,12,60,25,26,24,30,25,25,"axe, bow",None,Monster,Cavalry,None
+Mogall,15,2,1,2,2,4,4,60,20,20,20,30,20,20,monster,None,Monster,Flying,Arch Mogall
+Arch Mogall,17,6,3,3,3,7,5,60,29,26,26,30,20,29,monster,None,Monster,Flying,None
+Gorgon,19,8,3,4,5,7,11,60,29,26,26,30,21,28,monster,None,Monster,None,None
+Gargoyle,19,6,3,6,6,0,8,60,20,20,20,30,20,20,lance,None,Monster,Flying,Deathgoyle
+Deathgoyle,23,8,5,8,9,1,11,60,27,25,23,30,28,22,lance,None,Monster,Flying,None
+Draco Zombie,53,1,0,1,0,3,25,60,50,50,50,30,50,50,monster,None,Monster,Dragon,None
+Demon King,60,23,20,18,25,25,25,60,50,50,50,30,50,50,monster,None,Monster,None,None

@@ -9,8 +9,6 @@ class Unit:
     def __init__(self, unit):
         self.name = unit["name"]
         self.level = unit["level"]
-        self.promoted = unit["promoted"]
-        self.available_jobs = unit["available_jobs"]
         self.hp = unit["hp"]
         self.str = unit["str"]
         self.skl = unit["skl"]
@@ -43,32 +41,6 @@ class Unit:
 
     def assign_terrain(self, terrain):
         self.terrain = Terrain(terrain)
-    
-    def attack(self, target):
-        #  Terrain to add
-        if self.calculate_hit(target):
-            damage = (self.str + self.weapon.mt)
-
-            if self.weapon.magic == False:
-                damage -= target.defence - target.terrain.def_bonus
-            else:
-                damage -= target.res - target.terrain.def_bonus
-
-            if self.calculate_critical():
-                print("Critical Hit!")
-                damage *= 3
-
-            if damage < 0:
-                damage = 0
-            print(f"Damage: {damage}")
-
-            target.hp = target.hp - damage
-
-            if target.hp < 0:
-                target.hp = 0
-            return target.hp
-        
-        print("Miss!")
     
     def calculate_hit(self, target):
         # No support bonus to be considered
@@ -106,59 +78,33 @@ class Unit:
         else:
             return True
 
-    def battle(self, target):
-        # Calculate weapon advantage
-        self.weapon.calculate_weapon_triangle(target.weapon)
-        print(f"{self.weapon.type}")
-        print(f"{target.weapon.type}")
+    def attack(self, target):
+        if self.calculate_hit(target):
+            damage = (self.str + self.weapon.mt)
 
-        # Calculate effective damage (e.g. bows vs flying)
-        self.weapon.calculate_effective_damage(target.job)
-        target.weapon.calculate_effective_damage(self.job)
+            if self.weapon.magic == False:
+                damage -= target.defence - target.terrain.def_bonus
+            else:
+                damage -= target.res - target.terrain.def_bonus
 
-        # Calculate speed for accuracy & double strike used in attack
-        attack_speed = self.calculate_attack_speed()
-        target_attack_speed = target.calculate_attack_speed()
+            if self.calculate_critical():
+                print("Critical Hit!")
+                damage *= 3
 
-        while self.hp > 0 and target.hp > 0:
-            print(f"{self.name} attacks {target.name}")
-            self.attack(target)
-            print(f"{target.name}'s HP: {target.hp}\n")
-            if target.hp == 0:
-                break
-            time.sleep(3)
+            if damage < 0:
+                damage = 0
+            print(f"Damage: {damage}")
 
-            print(f"{target.name} attacks {self.name}")
-            target.attack(self)
-            print(f"{self.name}'s HP: {self.hp}\n")
-            if self.hp == 0:
-                break
-            time.sleep(3)
+            target.hp = target.hp - damage
 
-            # Check for double attack
-
-            if attack_speed - target_attack_speed >= 4:
-                print(f"{self.name}'s follow up!")
-                print(f"{self.name} attacks {target.name}")
-                self.attack(target)
-                print(f"{target.name}'s HP: {target.hp}\n")
-                time.sleep(3)
-
-            elif target_attack_speed - attack_speed >= 4:
-                print(f"{target.name}'s follow up!")
-                print(f"{target.name} attacks {self.name}")
-                target.attack(self)
-                print(f"{self.name}'s HP: {self.hp}\n")
-                time.sleep(3)
+            if target.hp < 0:
+                target.hp = 0
+            return target.hp
         
-        if self.hp == 0:
-            print(f"{self.name} has been defeated!")
-        
-        elif target.hp == 0:
-            print(f"{target.name} has been defeated!")
+        print("Miss!")
 
     def set_level(self, value = None):
-        starting_level = self.level
+        starting_level = int(self.level)
         if value == None:
             return
         if 1 <= value <= 20:
@@ -247,10 +193,10 @@ class Unit:
 
     def promote(self, index):
         if self.level >= 10:
-            new_job = self.available_jobs[index]
+            print(f"Promoting from {self.job} to {self.job.available_jobs[index]}")
+            new_job = self.job.available_jobs[index]
             self.job = Job(jobs[new_job])
             self.job.apply_stats(self)
-            self.available_jobs = None
             self.level = 1
         else:
             print("Cannot Promote")

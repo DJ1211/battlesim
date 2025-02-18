@@ -1,0 +1,107 @@
+name,wt,mt,hit,crt,type,effective_against,magic,invert_triangle,other_effect
+Iron Sword,5,5,90,0,sword,None,False,False,None
+Slim Sword,2,3,100,5,sword,None,False,False,None
+Steel Sword,10,8,75,0,sword,None,False,False,None
+Silver Sword,8,13,80,0,sword,None,False,False,None
+Iron Blade,12,9,70,0,sword,None,False,False,None
+Steel Blade,14,11,65,0,sword,None,False,False,None
+Silver Blade,13,14,60,0,sword,None,False,False,None
+Poison Sword,6,3,70,0,sword,None,False,False,None
+Rapier,5,7,95,10,sword,"Cavalry, Armour",False,False,None
+Brave Sword,12,9,75,0,sword,None,False,False,Brave
+Shamshir,5,8,75,35,sword,None,False,False,None
+Killing Edge,7,9,75,30,sword,None,False,False,None
+Armourslayer,11,8,80,0,sword,Armour,False,False,None
+Wyrmslayer,5,8,75,0,sword,Dragon,False,False,None
+Light Brand,9,9,70,0,sword,None,False,False,None
+Runesword,11,12,65,0,sword,None,False,False,Lifesteal
+Lancereaver,9,9,75,5,sword,None,False,True,None
+Zanbato,11,6,85,0,sword,Cavalry,False,False,None
+Shadowkiller,5,5,90,5,sword,Monster,False,False,None
+Sieglinde,9,16,90,0,sword,Monster,False,False,str +5
+Audhulma,9,18,85,0,sword,Monster,False,False,res +5
+Wind Sword,9,9,70,0,sword,Flying,False,False,None
+Iron Lance,8,7,80,0,lance,None,False,False,None
+Slim Lance,4,4,85,5,lance,None,False,False,None
+Steel Lance,13,10,70,0,lance,None,False,False,None
+Silver Lance,10,14,75,0,lance,None,False,False,None
+Toxin Lance,8,4,65,0,lance,None,False,False,None
+Brave Lance,14,10,70,0,lance,None,False,False,Brave
+Killer Lance,9,10,70,30,lance,None,False,False,None
+Horseslayer,13,7,70,0,lance,Cavalry,False,False,None
+Javelin,11,6,65,0,lance,None,False,False,None
+Spear,10,12,70,5,lance,None,False,False,None
+Axereaver,11,10,70,5,lance,None,False,True,None
+Reginleif,8,10,80,10,lance,"Cavalry, Armour",False,False,None
+Bright Lance,8,7,80,5,lance,Monster,False,False,None
+Dragonspear,8,10,70,0,lance,Dragon,False,False,None
+Vidofnir,11,15,85,0,lance,Monster,False,False,def +5
+Siegmund,11,17,80,0,lance,Monster,False,False,str +5
+Heavy Spear,14,9,70,0,lance,Armour,False,False,None
+Short Spear,12,9,60,0,lance,None,False,False,None
+Iron Axe,10,8,75,0,axe,None,False,False,None
+Steel Axe,15,11,65,0,axe,None,False,False,None
+Silver Axe,12,15,70,0,axe,None,False,False,None
+Poison Axe,10,4,60,0,axe,None,False,False,None
+Brave Axe,16,10,65,0,axe,None,False,False,Brave
+Killer Axe,11,11,65,30,axe,None,False,False,None
+Halberd,15,10,60,0,axe,Cavalry,False,False,None
+Hammer,15,10,55,0,axe,Armour,False,False,None
+Devil Axe,18,18,55,0,axe,None,False,False,Devil
+Hand Axe,12,7,60,0,axe,None,False,False,None
+Tomahawk,14,13,65,0,axe,None,False,False,None
+Swordreaver,13,11,65,5,axe,None,False,True,None
+Swordslayer,13,11,80,5,axe,sword,False,True,None
+Hatchet,5,4,85,0,axe,None,False,False,None
+Dragon Axe,11,12,60,0,axe,Dragon,False,False,None
+Fiendcleaver,10,8,75,5,axe,Monster,False,False,None
+Battle Axe,15,13,60,5,axe,None,False,False,None
+Garm,13,20,75,0,axe,Monster,False,False,spd +5
+Iron Bow,5,6,85,0,bow,Flying,False,False,None
+Steel Bow,9,9,70,0,bow,Flying,False,False,None
+Silver Bow,6,13,75,0,bow,Flying,False,False,None
+Poison Bow,5,4,65,0,bow,Flying,False,False,None
+Killer Bow,7,9,75,30,bow,Flying,False,False,None
+Brave Bow,12,10,70,0,bow,Flying,False,False,Brave
+Short Bow,3,5,85,10,bow,Flying,False,False,None
+Longbow,10,5,65,0,bow,Flying,False,False,None
+Ballista,20,8,60,0,bow,Flying,False,False,None
+Iron Ballista,20,13,60,0,bow,Flying,False,False,None
+Killer Ballista,20,12,65,10,bow,Flying,False,False,None
+Beacon Bow,5,6,85,5,bow,Flying,False,False,None
+Nidhogg,7,18,80,0,bow,Flying,False,False,lck +5
+Fire,4,5,90,0,anima,None,True,False,None
+Thunder,6,8,80,5,anima,None,True,False,None
+Elfire,10,10,85,0,anima,None,True,False,None
+Bolting,20,12,60,0,anima,None,True,False,None
+Fimbulvetr,12,13,80,0,anima,None,True,False,None
+Excalibur,13,18,90,10,anima,Monster,True,False,spd + 5
+Alacalibur,2,8,85,0,anima,Flying,True,False,None
+Flux,8,7,80,0,dark,None,True,False,None
+Luna,12,0,50,10,dark,None,True,False,Ignore Res
+Nosferatu,14,10,70,0,dark,None,True,False,Lifesteal
+Eclipse,12,0,30,0,dark,None,True,False,Halve HP
+Fenrir,18,15,70,0,dark,None,True,False,None
+Gleipnir,20,23,80,0,dark,None,True,False,skl +5
+Naglfar,18,25,95,0,dark,None,True,False,None
+Lightning,6,4,95,5,light,None,True,False,None
+Shine,8,6,90,8,light,None,True,False,None
+Divine,12,8,85,10,light,None,True,False,None
+Purge,20,10,75,5,light,None,True,False,None
+Aura,15,12,85,15,light,None,True,False,None
+Ivaldi,10,17,90,5,light,Monster,True,False,def +5
+Wretched Air,0,10,100,0,monster,None,False,False,"str +10, skl +10, def +20, res +10, ignore defence"
+Demon Light,0,15,60,0,monster,None,True,False,"str +10, skl +10, lck +10, def +10, res +15"
+Ravager,0,15,85,10,monster,None,False,False,"str +15, skl +15, def +15, res +10"
+Demon Surge,10,11,80,0,monster,None,True,False,None
+Shadowshot,20,13,70,5,monster,None,True,False,None
+Sharp Claw,14,14,65,0,monster,None,False,False,None
+Rotten Claw,8,7,80,0,monster,None,False,False,None
+Fetid Claw,10,12,75,0,monster,None,False,False,None
+Poison Claw,10,6,65,0,monster,None,False,False,None
+Lethal Talon,12,10,60,0,monster,None,False,False,None
+Fiery Fang,5,5,90,0,monster,None,False,False,None
+Hellfang,8,13,80,0,monster,None,False,False,None
+Evil Eye,6,7,85,0,monster,None,True,False,None
+Crimson Eye,13,14,70,5,monster,None,True,False,None
+Dragonstone,0,16,100,15,stone,Monster,False,False,"str +15, skl +12, def +15, res +20"

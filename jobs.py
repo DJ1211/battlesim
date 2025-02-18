@@ -17,6 +17,7 @@ class Job:
         self.lck_cap = job["lck_cap"]
         self.def_cap = job["def_cap"]
         self.res_cap = job["res_cap"]
+        self.available_jobs = job["available_jobs"]
         self.weapon_types = job["weapon_types"]
         self.type_1 = job["type_1"]
         self.type_2 = job["type_2"]

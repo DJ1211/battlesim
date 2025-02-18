@@ -13,9 +13,9 @@ Base stats for promoted units are their joining stats - the promotion bonus of p
 Similarly, unpromoted classes use the base stats for their stats, whereas promoted classes use the promotion bonuses
 This allows for more customisation as can more easily play with units in classes they don't usually have access to.
 
-Stats currently uncapped so units can get very strong. Caps to be added later as not a priority
-
 TBD:
 Class skills e.g. Swordmaster crit bonus
-Terrain bonus
-Special effects (e.g. reverse traingle advantage on -slayer weapons)
+Weapon skills (brave, devil)
+Swordslayer effective against sword user
+Monsters
+Add check for csv files exisiting
