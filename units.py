@@ -8,29 +8,47 @@ import time
 class Unit:
     def __init__(self, unit):
         self.name = unit["name"]
-        self.level = unit["level"]
-        self.hp = unit["hp"]
-        self.str = unit["str"]
-        self.skl = unit["skl"]
-        self.spd = unit["spd"]
-        self.lck = unit["lck"]
-        self.defence = unit["def"]
-        self.res = unit["res"]
-        self.con = unit["con"]
-        self.hp_grow = unit["hp_grow"]
-        self.str_grow = unit["str_grow"]
-        self.skl_grow = unit["str_grow"]
-        self.spd_grow = unit["spd_grow"]
-        self.lck_grow = unit["lck_grow"]
-        self.def_grow = unit["def_grow"]
-        self.res_grow = unit["res_grow"]
+        self.level = int(unit["level"])
+        self.hp = int(unit["hp"])
+        self.str = int(unit["str"])
+        self.skl = int(unit["skl"])
+        self.spd = int(unit["spd"])
+        self.lck = int(unit["lck"])
+        self.defence = int(unit["def"])
+        self.res = int(unit["res"])
+        self.con = int(unit["con"])
+        self.hp_grow = int(unit["hp_grow"])
+        self.str_grow = int(unit["str_grow"])
+        self.skl_grow = int(unit["str_grow"])
+        self.spd_grow = int(unit["spd_grow"])
+        self.lck_grow = int(unit["lck_grow"])
+        self.def_grow = int(unit["def_grow"])
+        self.res_grow = int(unit["res_grow"])
         self.weapon = None
         self.job = None
         self.terrain = None
+        self.base_hp = self.hp
+        self.base_str = self.str
+        self.base_skl = self.skl
+        self.base_spd = self.spd
+        self.base_defence = self.defence
+        self.base_res = self.res
+        self.base_con = self.con
     
     def assign_job(self, job):
-        self.job = Job(job)
-        self.job.apply_stats(self)
+        if self.job == None:
+            self.job = Job(job)
+            self.job.apply_stats(self)
+        else:
+            self.hp = self.base_hp
+            self.str = self.base_str
+            self.skl = self.base_skl
+            self.spd = self.base_spd
+            self.defence = self.base_defence
+            self.res = self.base_res
+            self.con = self.base_con
+            self.job = Job(job)
+            self.job.apply_stats(self)
 
     def assign_weapon(self, weapon):
         unit_weapon = Weapon(weapon)
@@ -104,10 +122,12 @@ class Unit:
         print("Miss!")
 
     def set_level(self, value = None):
-        starting_level = int(self.level)
+        # Records the starting level to be used in applying stats and then raises the level to the intended level
+
+        starting_level = self.level
         if value == None:
             return
-        if 1 <= value <= 20:
+        if 1 <= value <= self.job.max_level:
             print(f"Setting {self.name} to level {value}\n")
             self.level = value
         else:
@@ -193,7 +213,7 @@ class Unit:
 
     def promote(self, index):
         if self.level >= 10:
-            print(f"Promoting from {self.job} to {self.job.available_jobs[index]}")
+            print(f"Promoting from {self.job.name} to {self.job.available_jobs[index]}")
             new_job = self.job.available_jobs[index]
             self.job = Job(jobs[new_job])
             self.job.apply_stats(self)
@@ -207,3 +227,5 @@ class Unit:
         rand2 = random.randint(0, 99)
         return (rand1 + rand2) // 2
 
+    def test(self):
+        print("Create Unit")

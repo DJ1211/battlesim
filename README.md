@@ -17,5 +17,4 @@ TBD:
 Class skills e.g. Swordmaster crit bonus
 Weapon skills (brave, devil)
 Swordslayer effective against sword user
-Monsters
 Add check for csv files exisiting

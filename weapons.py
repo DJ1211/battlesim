@@ -3,14 +3,15 @@ from dicts import weapons
 class Weapon:
     def __init__(self, weapon):
         self.name = weapon["name"]
-        self.mt = weapon["mt"]
-        self.hit = weapon["hit"]
-        self.crt = weapon["crt"]
-        self.wt = weapon["wt"]
+        self.wt = int(weapon["wt"])
+        self.mt = int(weapon["mt"])
+        self.hit = int(weapon["hit"])
+        self.crt = int(weapon["crt"])
         self.type = weapon["type"]
-        self.magic = weapon["magic"]
         self.effective_against = weapon["effective_against"]
-        self.invert_triangle = weapon["invert_triangle"]
+        self.magic = weapon["magic"] == "True"
+        self.invert_triangle = weapon["invert_triangle"] == "True"
+        self.other_effect = weapon["other_effect"]
 
     def calculate_weapon_triangle(self, target):
         if self.invert_triangle == True or target.invert_triangle == True:

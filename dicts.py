@@ -7,6 +7,7 @@ path = "./stat_sheets/weapons.csv"
 weapons = {}
 units = {}
 jobs = {}
+terrain = {}
 
 with open ("./stat_sheets/weapons.csv", newline='') as weaponscsv:
     reader = csv.DictReader(weaponscsv)
@@ -37,20 +38,9 @@ with open ("./stat_sheets/jobs.csv", newline='') as jobscsv:
             v["available_jobs"] = v["available_jobs"].split(", ")
         jobs[k] = v
 
-
-
-
-
-
-terrain = {"plain": {
-                    "name": "Plain",
-                    "avoid": 0,
-                    "def_bonus": 0
-                    },
-
-           "forest": {
-                     "name": "Forest",
-                     "avoid": 20,
-                     "def_bonus": 1
-                     }
-        }
+with open ("./stat_sheets/terrain.csv", newline='') as terraincsv:
+    reader = csv.DictReader(terraincsv)
+    for row in reader:
+        k = row["name"]
+        v = row
+        terrain[k] = v

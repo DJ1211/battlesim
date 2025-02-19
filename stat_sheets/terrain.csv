@@ -1,0 +1,10 @@
+name,avoid,def_bonus
+Plain,0,0
+Sand,5,0
+House,10,0
+Forest,20,1
+Pillar,20,1
+Mountain,30,1
+Peak,40,2
+Fort,20,2
+Gate,30,3
