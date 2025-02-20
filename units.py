@@ -27,20 +27,24 @@ class Unit:
         self.res_grow = int(unit["res_grow"])
         self.weapon = None
         self.terrain = None
+        self.base_level = self.level
         self.base_hp = self.hp
         self.base_str = self.str
         self.base_skl = self.skl
         self.base_spd = self.spd
+        self.base_lck = self.lck
         self.base_defence = self.defence
         self.base_res = self.res
         self.base_con = self.con
         self.assign_job(jobs[self.job])
     
     def assign_job(self, job):
+        self.level = self.base_level
         self.hp = self.base_hp
         self.str = self.base_str
         self.skl = self.base_skl
         self.spd = self.base_spd
+        self.lck = self.base_lck
         self.defence = self.base_defence
         self.res = self.base_res
         self.con = self.base_con
@@ -214,6 +218,13 @@ class Unit:
         if self.level >= 10:
             print(f"Promoting from {self.job.name} to {target_job}")
             self.job = Job(jobs[target_job])
+            print(f"HP +{self.job.hp_promote}")
+            print(f"Str +{self.job.str_promote}")
+            print(f"Skl +{self.job.skl_promote}")
+            print(f"Spd +{self.job.spd_promote}")
+            print(f"Def +{self.job.def_promote}")
+            print(f"Res +{self.job.res_promote}")
+            print(f"Con +{self.job.con_promote}")
             self.job.apply_stats(self)
             self.level = 1
         else:

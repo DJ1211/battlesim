@@ -1,7 +1,22 @@
 from tkinter import Tk, BOTH, Canvas, Button, StringVar, OptionMenu, Label, ttk, IntVar, Checkbutton, Entry
+from tkinter.scrolledtext import ScrolledText
 from dicts import units, jobs, weapons
 from units import Unit
 from jobs import Job
+import sys
+
+class Console(object):
+    def __init__(self, textbox):
+        self.textbox = textbox
+
+    def write(self, text):
+        self.textbox.configure(state="normal")
+        self.textbox.insert("end", text)
+        self.textbox.see("end")
+        self.textbox.configure(state="disabled")
+
+    def flush(self):
+        pass
 
 class Window:
     def __init__(self, width, height):
@@ -20,26 +35,52 @@ class Window:
 
         self.unit_list = list(units.keys())
         self.jobs_list = list(jobs.keys())
-        self.weapons_list = list(weapons.keys())
+        
+        self.unit_1_name_label = Label(self.__canvas)
+        self.unit_1_level_label = Label(self.__canvas)
+        self.unit_1_job_label = Label(self.__canvas)
+        self.unit_1_hp_label = Label(self.__canvas)
+        self.unit_1_str_label = Label(self.__canvas)
+        self.unit_1_skl_label = Label(self.__canvas)
+        self.unit_1_spd_label = Label(self.__canvas)
+        self.unit_1_lck_label = Label(self.__canvas)
+        self.unit_1_defence_label = Label(self.__canvas)
+        self.unit_1_res_label = Label(self.__canvas)
+        self.unit_1_con_label = Label(self.__canvas)
+        self.unit_1_weapon_label = Label(self.__canvas)
+        self.unit_1_weapon_mt_label = Label(self.__canvas)
+        self.unit_1_weapon_wt_label = Label(self.__canvas)
+        self.unit_1_weapon_hit_label = Label(self.__canvas)
+        self.unit_1_weapon_crt_label = Label(self.__canvas)
+        self.unit_1_level_up_label = Label(self.__canvas, text = "Level Up to Level:")
 
+        self.unit_1_unit_labels = {
+            "name_label": {'label': self.unit_1_name_label, 'row': 0, 'column':1},
+            "level_label": {'label': self.unit_1_level_label, 'row': 1, 'column': 1}, 
+            "job_label": {'label': self.unit_1_job_label, 'row': 2, 'column': 1}, 
+            "hp_label": {'label': self.unit_1_hp_label, 'row': 3, 'column': 1}, 
+            "str_label": {'label': self.unit_1_str_label, 'row': 4, 'column': 1}, 
+            "skl_label": {'label': self.unit_1_skl_label, 'row': 5, 'column': 1}, 
+            "spd_label": {'label': self.unit_1_spd_label, 'row': 6, 'column': 1}, 
+            "lck_label": {'label': self.unit_1_lck_label, 'row': 7, 'column': 1}, 
+            "defence_label": {'label': self.unit_1_defence_label, 'row': 8, 'column': 1}, 
+            "res_label": {'label': self.unit_1_res_label, 'row': 9, 'column': 1}, 
+            "con_label": {'label': self.unit_1_con_label, 'row': 10, 'column': 1}, 
+            "weapon_label": {'label': self.unit_1_weapon_label, 'row': 11, 'column': 1}, 
+        }
+        self.unit_1_weapon_labels = {
+            "mt_label": {'label': self.unit_1_weapon_mt_label, 'row': 12, 'column':1},
+            "wt_label": {'label': self.unit_1_weapon_wt_label, 'row': 13, 'column':1},
+            "hit_label": {'label': self.unit_1_weapon_hit_label, 'row': 14, 'column':1},
+            "crt_label": {'label': self.unit_1_weapon_crt_label, 'row': 15, 'column':1},
+        }
 
-        self.unit_1_name_label = Label(self.__root)
-        self.unit_1_level_label = Label(self.__root)
-        self.unit_1_job_label = Label(self.__root)
-        self.unit_1_hp_label = Label(self.__root)
-        self.unit_1_str_label = Label(self.__root)
-        self.unit_1_skl_label = Label(self.__root)
-        self.unit_1_spd_label = Label(self.__root)
-        self.unit_1_lck_label = Label(self.__root)
-        self.unit_1_defence_label = Label(self.__root)
-        self.unit_1_res_label = Label(self.__root)
-        self.unit_1_con_label = Label(self.__root)
-        self.unit_1_weapon_label = Label(self.__root, text = "Weapon: None")
-        self.unit_1_weapon_mt_label = Label(self.__root)
-        self.unit_1_weapon_wt_label = Label(self.__root)
-        self.unit_1_weapon_hit_label = Label(self.__root)
-        self.unit_1_weapon_crt_label = Label(self.__root)
-        self.unit_1_level_up_label = Label(self.__root, text = "Level Up to Level:")
+        for label_info in self.unit_1_unit_labels.values():
+            label_info['label'].grid(row=label_info['row'], column=label_info['column'])
+        for label_info in self.unit_1_weapon_labels.values():
+            label_info['label'].grid(row=label_info['row'], column=label_info['column'])
+
+        
 
 
         self.unit_1_clicked = StringVar()
@@ -53,10 +94,14 @@ class Window:
         self.unit_1_level_var = StringVar()
         
         if self.unit_1_button is None:
-            combo_unit_1 = ttk.Combobox(self.__root, textvariable=self.unit_1_clicked, values=self.unit_list)
-            combo_unit_1.pack()
-            self.unit_1_button = Button(self.__root, text="Select Unit", command = self.select_unit_1)
-            self.unit_1_button.pack()
+            combo_unit_1 = ttk.Combobox(self.__canvas, textvariable=self.unit_1_clicked, values=self.unit_list)
+            combo_unit_1.grid(row=0, column=0)
+            self.unit_1_button = Button(self.__canvas, text="Select Unit", command = self.select_unit_1)
+            self.unit_1_button.grid(row=1, column=0)
+
+        self.log_widget = ScrolledText(self.__root, height=20, width=80, font=("Arial", "12", "normal"))
+        self.log_widget.pack()
+        self.redirect_console()
 
 
 
@@ -68,6 +113,7 @@ class Window:
         self.__is_running = True  
         while self.__is_running:
             self.redraw()
+        self.reset_logging()
         print("Window Closed")
 
     def close(self):
@@ -76,70 +122,74 @@ class Window:
     def select_unit_1(self):
         unit = self.unit_1_clicked.get()
         self.unit_1 = Unit(units[unit])
-        self.unit_1_promotion_list = list(self.unit_1.job.available_jobs)
+        self.unit_1_promotion_list = self.update_promotions_list(self.unit_1)
+        self.unit_1_weapons_list = self.update_weapons_list(self.unit_1)
         self.update_unit_display()
 
-        self.unit_1_name_label.pack()
-        self.unit_1_level_label.pack()
-        self.unit_1_job_label.pack()
-        self.unit_1_hp_label.pack()
-        self.unit_1_str_label.pack()
-        self.unit_1_skl_label.pack()
-        self.unit_1_spd_label.pack()
-        self.unit_1_lck_label.pack()
-        self.unit_1_defence_label.pack()
-        self.unit_1_res_label.pack()
-        self.unit_1_con_label.pack()
-        self.unit_1_weapon_label.pack()
-
         if self.unit_1_weapon_button is None:
-                self.combo_unit_1_weapon = ttk.Combobox(self.__root, textvariable=self.unit_1_weapon_clicked, values=self.weapons_list)
-                self.combo_unit_1_weapon.pack()
-                self.unit_1_weapon_button = Button(self.__root, text="Equip Weapon", command = self.apply_unit_1_weapon)
-                self.unit_1_weapon_button.pack()
+                self.combo_unit_1_weapon = ttk.Combobox(self.__canvas, textvariable=self.unit_1_weapon_clicked, values=self.unit_1_weapons_list)
+                self.combo_unit_1_weapon.grid(row=2, column=0)
+                self.unit_1_weapon_button = Button(self.__canvas, text="Equip Weapon", 
+                                                   command = lambda: self.apply_weapon(self.unit_1,
+                                                                                       self.unit_1_weapon_clicked,
+                                                                                       self.unit_1_weapon_labels))
+                self.unit_1_weapon_button.grid(row=3, column=0)
         
         if self.unit_1_promotions_button is None:
-            self.combo_unit_1_promotions = ttk.Combobox(self.__root, textvariable=self.unit_1_promotion_clicked, values=self.unit_1_promotion_list)
-            self.combo_unit_1_promotions.pack()
-            self.unit_1_promotions_button = Button(self.__root, text="Promote Unit", command = self.unit_1_promote)
-            self.unit_1_promotions_button.pack()
+            self.combo_unit_1_promotions = ttk.Combobox(self.__canvas, textvariable=self.unit_1_promotion_clicked, values=self.unit_1_promotion_list)
+            self.combo_unit_1_promotions.grid(row=4, column=0)
+            self.unit_1_promotions_button = Button(self.__canvas, text="Promote Unit",
+                                                   command = lambda: self.apply_promotion(self.unit_1,
+                                                                                        self.unit_1_promotion_clicked,
+                                                                                        self.combo_unit_1_promotions))
+            self.unit_1_promotions_button.grid(row=5, column=0)
         
         if self.unit_1_checkbutton is None:
             self.unit_1_var = IntVar()
-            self.checkbutton = Checkbutton(self.__root, text = "Change Class?", variable = self.unit_1_var, onvalue = 1, offvalue = 0, command = self.on_unit_1_button_toggle)
-            self.checkbutton.pack()
+            self.checkbutton = Checkbutton(self.__canvas, text = "Change Class?", variable = self.unit_1_var, onvalue = 1, offvalue = 0, command = self.on_unit_1_button_toggle)
+            self.checkbutton.grid(row=10, column=0)
         
         if self.unit_1_level_up_entry is None:
-            self.unit_1_level_up_entry = Entry(self.__root, textvariable= self.unit_1_level_var)
-            self.unit_1_level_up_sub_btn = Button(self.__root, text = "Submit", command = self.unit_1_submit)
-            self.unit_1_level_up_label.pack()
-            self.unit_1_level_up_entry.pack()
-            self.unit_1_level_up_sub_btn.pack()
+            self.unit_1_level_up_entry = Entry(self.__canvas, textvariable= self.unit_1_level_var)
+            self.unit_1_level_up_sub_btn = Button(self.__canvas, text = "Submit", command = lambda: self.apply_level_up(self.unit_1,
+                                                                                                              self.unit_1_level_var))
+            self.unit_1_level_up_label.grid(row=7, column=0)
+            self.unit_1_level_up_entry.grid(row=8, column=0)
+            self.unit_1_level_up_sub_btn.grid(row=9, column=0)
 
-    def apply_unit_1_job(self):
-        job = self.unit_1_job_clicked.get()
-        unit_1_job = jobs[job]
-        self.unit_1.assign_job(unit_1_job)
-        self.unit_1_promotion_list = list(self.unit_1.job.available_jobs)
-        self.combo_unit_1_promotions['values'] = self.unit_1_promotion_list
+    def on_unit_1_button_toggle(self):
+        if self.unit_1_var.get() == 1:
+            self.combo_unit_1_job = ttk.Combobox(self.__canvas, textvariable=self.unit_1_job_clicked, values=self.jobs_list)
+            self.combo_unit_1_job.grid(row=12, column=0)
+            self.unit_1_job_button = Button(self.__canvas, text="Apply Class", command = lambda: self.apply_job(self.unit_1,
+                                                                                                              self.unit_1_job_clicked,
+                                                                                                              self.combo_unit_1_weapon,
+                                                                                                              self.combo_unit_1_promotions))
+            self.unit_1_job_button.grid(row=11, column=0)
+        else:
+            self.combo_unit_1_job.grid_remove()
+            self.unit_1_job_button.grid_remove()
+
+    def apply_job(self, unit, job_clicked, weapon_combobox, promotions_combobox):
+        job = job_clicked.get()
+        unit_job = jobs[job]
+        unit.assign_job(unit_job)
+        self.update_weapons_list(unit, weapon_combobox)
+        self.update_promotions_list(unit, promotions_combobox)
         self.update_unit_display()
     
-    def apply_unit_1_weapon(self):
-        weapon = self.unit_1_weapon_clicked.get()
-        unit_1_weapon = weapons[weapon]
-        self.unit_1.assign_weapon(unit_1_weapon)
-        self.unit_1_weapon_mt_label.pack()
-        self.unit_1_weapon_wt_label.pack()
-        self.unit_1_weapon_hit_label.pack()
-        self.unit_1_weapon_crt_label.pack()
+    def apply_weapon(self, unit, weapon_clicked, label_dict):
+        weapon = weapon_clicked.get()
+        unit_weapon = weapons[weapon]
+        unit.assign_weapon(unit_weapon)
+
 
         self.update_unit_display()
 
-    def unit_1_promote(self):
-        target_job = self.unit_1_promotion_clicked.get()
-        self.unit_1.promote(target_job)
-        self.unit_1_promotion_list = list(self.unit_1.job.available_jobs)
-        self.combo_unit_1_promotions['values'] = self.unit_1_promotion_list
+    def apply_promotion(self, unit, promotion_clicked, promotion_combobox):
+        target_job = promotion_clicked.get()
+        unit.promote(target_job)
+        self.update_promotions_list(unit, promotion_combobox)
         self.update_unit_display()
 
 
@@ -164,19 +214,39 @@ class Window:
             self.unit_1_weapon_mt_label.config(text = "Mt: " + str(self.unit_1.weapon.mt))
             self.unit_1_weapon_hit_label.config(text = "Hit: " + str(self.unit_1.weapon.hit))
             self.unit_1_weapon_crt_label.config(text = "Crt: " + str(self.unit_1.weapon.crt))
-
-    def on_unit_1_button_toggle(self):
-        if self.unit_1_var.get() == 1:
-            self.combo_unit_1_job = ttk.Combobox(self.__root, textvariable=self.unit_1_job_clicked, values=self.jobs_list)
-            self.combo_unit_1_job.pack()
-            self.unit_1_job_button = Button(self.__root, text="Apply Class", command = self.apply_unit_1_job)
-            self.unit_1_job_button.pack()
-        else:
-            self.combo_unit_1_job.pack_forget()
-            self.unit_1_job_button.pack_forget()
         
-    def unit_1_submit(self):
-        target_level = self.unit_1_level_var.get()
-        self.unit_1.set_level(int(target_level))
-        self.unit_1_level_var.set("")
+    def apply_level_up(self, unit, level_var):
+        target_level = level_var.get()
+        unit.set_level(int(target_level))
+        level_var.set("")
         self.update_unit_display()
+
+    def update_weapons_list(self, unit, weapon_combobox = None):
+        valid_weapons = [weapon_key for weapon_key in weapons.keys()
+                        if weapons[weapon_key]['type'] in unit.job.weapon_types]
+
+        if weapon_combobox is not None:
+            weapon_combobox['values'] = valid_weapons
+        else:
+            return valid_weapons
+
+    def update_promotions_list(self, unit, promotions_combobox = None):
+        valid_jobs = unit.job.available_jobs
+
+        if promotions_combobox is not None:
+            promotions_combobox['values'] = valid_jobs
+        else:
+            return valid_jobs
+        
+
+    def reset_logging(self):
+        sys.stdout = sys.__stdout__
+        sys.stderr = sys.__stderr__
+
+    def test_print(self):
+        print("Test Print")
+    
+    def redirect_console(self):
+        console = Console(self.log_widget)
+        sys.stdout = console
+        sys.stderr = console
