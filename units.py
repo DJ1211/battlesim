@@ -9,6 +9,7 @@ class Unit:
     def __init__(self, unit):
         self.name = unit["name"]
         self.level = int(unit["level"])
+        self.job = unit["default_job"]
         self.hp = int(unit["hp"])
         self.str = int(unit["str"])
         self.skl = int(unit["skl"])
@@ -25,7 +26,6 @@ class Unit:
         self.def_grow = int(unit["def_grow"])
         self.res_grow = int(unit["res_grow"])
         self.weapon = None
-        self.job = None
         self.terrain = None
         self.base_hp = self.hp
         self.base_str = self.str
@@ -34,21 +34,18 @@ class Unit:
         self.base_defence = self.defence
         self.base_res = self.res
         self.base_con = self.con
+        self.assign_job(jobs[self.job])
     
     def assign_job(self, job):
-        if self.job == None:
-            self.job = Job(job)
-            self.job.apply_stats(self)
-        else:
-            self.hp = self.base_hp
-            self.str = self.base_str
-            self.skl = self.base_skl
-            self.spd = self.base_spd
-            self.defence = self.base_defence
-            self.res = self.base_res
-            self.con = self.base_con
-            self.job = Job(job)
-            self.job.apply_stats(self)
+        self.hp = self.base_hp
+        self.str = self.base_str
+        self.skl = self.base_skl
+        self.spd = self.base_spd
+        self.defence = self.base_defence
+        self.res = self.base_res
+        self.con = self.base_con
+        self.job = Job(job)
+        self.job.apply_stats(self)
 
     def assign_weapon(self, weapon):
         unit_weapon = Weapon(weapon)
@@ -126,6 +123,9 @@ class Unit:
 
         starting_level = self.level
         if value == None:
+            return
+        if value <= self.level:
+            print("Cannot lower level")
             return
         if 1 <= value <= self.job.max_level:
             print(f"Setting {self.name} to level {value}\n")
@@ -209,13 +209,11 @@ class Unit:
         print(f"Def +{def_counter}")
         print(f"Res +{res_counter}")
         print("\n")
-        time.sleep(5)    
 
-    def promote(self, index):
+    def promote(self, target_job):
         if self.level >= 10:
-            print(f"Promoting from {self.job.name} to {self.job.available_jobs[index]}")
-            new_job = self.job.available_jobs[index]
-            self.job = Job(jobs[new_job])
+            print(f"Promoting from {self.job.name} to {target_job}")
+            self.job = Job(jobs[target_job])
             self.job.apply_stats(self)
             self.level = 1
         else:

@@ -1,4 +1,4 @@
-name,level,job,hp,str,skl,spd,lck,def,res,con,hp_grow,str_grow,skl_grow,spd_grow,lck_grow,def_grow,res_grow
+name,level,default_job,hp,str,skl,spd,lck,def,res,con,hp_grow,str_grow,skl_grow,spd_grow,lck_grow,def_grow,res_grow
 Eirika,1,Lord (F),0,0,0,0,5,0,0,0,70,40,60,60,60,30,30
 Seth,1,Paladin (M),7,7,9,5,13,3,5,0,90,50,45,45,25,40,30
 Franz,1,Cavalier (M),0,2,3,2,2,0,1,2,80,40,40,50,40,25,20
