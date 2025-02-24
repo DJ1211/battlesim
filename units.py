@@ -225,7 +225,8 @@ class Unit:
             print(f"Def +{self.job.def_promote}")
             print(f"Res +{self.job.res_promote}")
             print(f"Con +{self.job.con_promote}")
-            self.job.apply_stats(self)
+            print("\n")
+            self.job.apply_promotion(self)
             self.level = 1
         else:
             print("Cannot Promote")

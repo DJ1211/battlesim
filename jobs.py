@@ -40,3 +40,14 @@ class Job:
         unit.defence += self.defence
         unit.res += self.res
         unit.con += self.con
+
+    def apply_promotion(self, unit):
+        # Applies class promotion stats to unit
+        unit.hp += self.hp_promote
+        unit.str += self.str_promote
+        unit.skl += self.skl_promote
+        unit.spd += self.spd_promote
+        unit.defence += self.def_promote
+        unit.res += self.res_promote
+        unit.con += self.con_promote
+
