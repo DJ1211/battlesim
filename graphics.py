@@ -1,26 +1,11 @@
 from tkinter import Tk, BOTH, Frame, Canvas, Button, StringVar, OptionMenu, Label, ttk, IntVar, Checkbutton, Entry
 from tkinter.scrolledtext import ScrolledText
-from dicts import units, jobs, weapons
+from dicts import units, jobs, weapons, terrain
 from units import Unit
-from jobs import Job
-import sys
-
-class Console(object):
-    # Creates center logging window
-    def __init__(self, textbox):
-        self.textbox = textbox
-
-    def write(self, text):
-        self.textbox.configure(state="normal")
-        self.textbox.insert("end", text)
-        self.textbox.see("end")
-        self.textbox.configure(state="disabled")
-
-#    def flush(self):
-#        pass
+from battle import Battle
 
 class Window:
-    def __init__(self, width, height):
+    def __init__(self):
         self.__root = Tk()
         self.__root.title("Battle Simulator")
         self.__root.protocol("WM_DELETE_WINDOW", self.close)
@@ -30,6 +15,7 @@ class Window:
       
         self.unit_list = list(units.keys())
         self.jobs_list = list(jobs.keys())
+        self.terrain_list = list(terrain.keys())
 
         self.unit_1_clicked = StringVar()
         self.unit_1_clicked.set("Select a Unit")
@@ -39,6 +25,8 @@ class Window:
         self.unit_1_weapon_clicked.set("Select a Weapon")
         self.unit_1_promotion_clicked = StringVar()
         self.unit_1_promotion_clicked.set("Choose a Promotion")
+        self.unit_1_terrain_clicked = StringVar()
+        self.unit_1_terrain_clicked.set("Choose Terrain")
         self.unit_1_level_var = StringVar()
         self.unit_1_var = IntVar()
 
@@ -50,6 +38,8 @@ class Window:
         self.unit_2_weapon_clicked.set("Select a Weapon")
         self.unit_2_promotion_clicked = StringVar()
         self.unit_2_promotion_clicked.set("Choose a Promotion")
+        self.unit_2_terrain_clicked = StringVar()
+        self.unit_2_terrain_clicked.set("Choose Terrain")
         self.unit_2_level_var = StringVar()
         self.unit_2_var = IntVar()
 
@@ -76,14 +66,18 @@ class Window:
         self.combo_unit_1_weapon = ttk.Combobox(self.unit_1_button_frame, textvariable=self.unit_1_weapon_clicked, values=None, state='disabled')
         self.unit_1_weapon_button = Button(self.unit_1_button_frame, text="Equip Weapon", 
                                                    command = lambda: self.apply_weapon(self.unit_1,
-                                                                                       self.unit_1_weapon_clicked,
-                                                                                       self.unit_1_weapon_labels),
+                                                                                       self.unit_1_weapon_clicked),
                                                     state='disabled')
         self.combo_unit_1_promotions = ttk.Combobox(self.unit_1_button_frame, textvariable=self.unit_1_promotion_clicked, values=None, state='disabled')
         self.unit_1_promotions_button = Button(self.unit_1_button_frame, text="Promote Unit",
                                                    command = lambda: self.apply_promotion(self.unit_1,
                                                                                         self.unit_1_promotion_clicked,
                                                                                         self.combo_unit_1_promotions),
+                                                    state='disabled')
+        self.combo_unit_1_terrain = ttk.Combobox(self.unit_1_button_frame, textvariable=self.unit_1_terrain_clicked, values=self.terrain_list, state='disabled')
+        self.unit_1_terrain_button = Button(self.unit_1_button_frame, text="Apply Terrain",
+                                                   command = lambda: self.apply_terrain(self.unit_1,
+                                                                                        self.unit_1_terrain_clicked),
                                                     state='disabled')
         self.unit_1_checkbutton = Checkbutton(self.unit_1_button_frame, text = "Change Class?", variable = self.unit_1_var, onvalue = 1, offvalue = 0, command = self.on_unit_1_button_toggle, state='disabled')
         self.unit_1_level_up_entry = Entry(self.unit_1_button_frame, textvariable= self.unit_1_level_var, state='disabled')
@@ -103,8 +97,7 @@ class Window:
         self.combo_unit_2_weapon = ttk.Combobox(self.unit_2_button_frame, textvariable=self.unit_2_weapon_clicked, values=None, state='disabled')
         self.unit_2_weapon_button = Button(self.unit_2_button_frame, text="Equip Weapon", 
                                                    command = lambda: self.apply_weapon(self.unit_2,
-                                                                                       self.unit_2_weapon_clicked,
-                                                                                       self.unit_2_weapon_labels),
+                                                                                       self.unit_2_weapon_clicked),
                                                                                        state='disabled')
         self.combo_unit_2_promotions = ttk.Combobox(self.unit_2_button_frame, textvariable=self.unit_2_promotion_clicked, values=None, state='disabled')
         self.unit_2_promotions_button = Button(self.unit_2_button_frame, text="Promote Unit",
@@ -112,6 +105,11 @@ class Window:
                                                                                         self.unit_2_promotion_clicked,
                                                                                         self.combo_unit_2_promotions),
                                                                                         state='disabled')
+        self.combo_unit_2_terrain = ttk.Combobox(self.unit_2_button_frame, textvariable=self.unit_2_terrain_clicked, values=self.terrain_list, state='disabled')
+        self.unit_2_terrain_button = Button(self.unit_2_button_frame, text="Apply Terrain",
+                                                   command = lambda: self.apply_terrain(self.unit_2,
+                                                                                        self.unit_2_terrain_clicked),
+                                                    state='disabled')
         self.unit_2_checkbutton = Checkbutton(self.unit_2_button_frame, text = "Change Class?", variable = self.unit_2_var, onvalue = 1, offvalue = 0, command = self.on_unit_2_button_toggle, state='disabled')
         self.unit_2_level_up_entry = Entry(self.unit_2_button_frame, textvariable= self.unit_2_level_var, state='disabled')
         self.unit_2_level_up_sub_btn = Button(self.unit_2_button_frame, text = "Level Up", command = lambda: self.apply_level_up(self.unit_2,
@@ -123,9 +121,11 @@ class Window:
                                                                                                               self.combo_unit_2_weapon,
                                                                                                               self.combo_unit_2_promotions))
         
+        self.battle_button = Button(self.battle_window_frame, text="Battle!", command=None, state='disabled')
+        
         # Create all labels
 
-        self.unit_1_label = Label(self.unit_1_label_frame, text = "Blue Unit", font=('', 12, 'bold'), width=20)
+        self.unit_1_label = Label(self.unit_1_label_frame, text = "Attacking Unit", font=('', 12, 'bold'), width=20)
         self.unit_1_name_label = Label(self.unit_1_label_frame, text = "Name: None", width=20)
         self.unit_1_level_label = Label(self.unit_1_label_frame, text = "Level: None", width=20)
         self.unit_1_job_label = Label(self.unit_1_label_frame, text = "Class: None", width=20)
@@ -142,9 +142,12 @@ class Window:
         self.unit_1_weapon_wt_label = Label(self.unit_1_label_frame, text = "Wt: None", width=20)
         self.unit_1_weapon_hit_label = Label(self.unit_1_label_frame, text = "Hit: None", width=20)
         self.unit_1_weapon_crt_label = Label(self.unit_1_label_frame, text = "Crt: None", width=20)
+        self.unit_1_terrain_type_label = Label(self.unit_1_label_frame, text = "Terrain: None", width=20)
+        self.unit_1_terrain_def_label = Label(self.unit_1_label_frame, text = "Def Bonus: None", width=20)
+        self.unit_1_terrain_avoid_label = Label(self.unit_1_label_frame, text = "Avoid Bonus: None", width=20)
         self.unit_1_level_up_label = Label(self.unit_1_button_frame, text = "Level Up to Level:", width=20)
 
-        self.unit_2_label = Label(self.unit_2_label_frame, text = "Red Unit", font=('', 12, 'bold'), width=20)
+        self.unit_2_label = Label(self.unit_2_label_frame, text = "Defending Unit", font=('', 12, 'bold'), width=20)
         self.unit_2_name_label = Label(self.unit_2_label_frame, text = "Name: None", width=20)
         self.unit_2_level_label = Label(self.unit_2_label_frame, text = "Level: None", width=20)
         self.unit_2_job_label = Label(self.unit_2_label_frame, text = "Class: None", width=20)
@@ -161,6 +164,9 @@ class Window:
         self.unit_2_weapon_wt_label = Label(self.unit_2_label_frame, text = "Wt: None", width=20)
         self.unit_2_weapon_hit_label = Label(self.unit_2_label_frame, text = "Hit: None", width=20)
         self.unit_2_weapon_crt_label = Label(self.unit_2_label_frame, text = "Crt: None", width=20)
+        self.unit_2_terrain_type_label = Label(self.unit_2_label_frame, text = "Terrain: None", width=20)
+        self.unit_2_terrain_def_label = Label(self.unit_2_label_frame, text = "Def Bonus: None", width=20)
+        self.unit_2_terrain_avoid_label = Label(self.unit_2_label_frame, text = "Avoid Bonus: None", width=20)
         self.unit_2_level_up_label = Label(self.unit_2_button_frame, text = "Level Up to Level:", width=20)
 
         # Pack all buttons & labels into grid
@@ -170,14 +176,16 @@ class Window:
             "unit_1_button": {'button': self.unit_1_button, 'row': 1, 'column': 4, 'padx': 5, 'pady': 5},
             "unit_1_weapon_combo": {'button': self.combo_unit_1_weapon, 'row': 2, 'column': 4, 'padx': 5, 'pady': 5},
             "unit_1_weapon_button": {'button': self.unit_1_weapon_button, 'row': 3, 'column': 4, 'padx': 5, 'pady': 5},
-            "unit_1_promotion_combo": {'button': self.combo_unit_1_promotions, 'row': 4, 'column': 4, 'padx': 5, 'pady': 5},
-            "unit_1_promotion_button": {'button': self.unit_1_promotions_button, 'row': 5, 'column': 4, 'padx': 5, 'pady': 5},
-            "unit_1_level_label": {'button': self.unit_1_level_up_label, 'row': 7, 'column': 4, 'padx': 5, 'pady': 5},
-            "unit_1_level_entry": {'button': self.unit_1_level_up_entry, 'row': 8, 'column': 4, 'padx': 5, 'pady': 5},
-            "unit_1_level_button": {'button': self.unit_1_level_up_sub_btn, 'row': 9, 'column': 4, 'padx': 5, 'pady': 5},
-            "unit_1_checkbutton": {'button': self.unit_1_checkbutton, 'row': 10, 'column': 4, 'padx': 5, 'pady': 5},
-            "unit_1_job_combo": {'button': self.combo_unit_1_job, 'row': 11, 'column': 4, 'padx': 5, 'pady': 5},
-            "unit_1_job_button": {'button': self.unit_1_job_button, 'row': 12, 'column': 4, 'padx': 5, 'pady': 5},
+            "unit_1_level_label": {'button': self.unit_1_level_up_label, 'row': 4, 'column': 4, 'padx': 5, 'pady': 5},
+            "unit_1_level_entry": {'button': self.unit_1_level_up_entry, 'row': 5, 'column': 4, 'padx': 5, 'pady': 5},
+            "unit_1_level_button": {'button': self.unit_1_level_up_sub_btn, 'row': 6, 'column': 4, 'padx': 5, 'pady': 5},
+            "unit_1_promotion_combo": {'button': self.combo_unit_1_promotions, 'row': 7, 'column': 4, 'padx': 5, 'pady': 5},
+            "unit_1_promotion_button": {'button': self.unit_1_promotions_button, 'row': 8, 'column': 4, 'padx': 5, 'pady': 5},
+            "unit_1_terrain_combo": {'button': self.combo_unit_1_terrain, 'row': 9, 'column': 4, 'padx': 5, 'pady': 5},
+            "unit_1_terrain_button": {'button': self.unit_1_terrain_button, 'row': 10, 'column': 4, 'padx': 5, 'pady': 5},
+            "unit_1_checkbutton": {'button': self.unit_1_checkbutton, 'row': 11, 'column': 4, 'padx': 5, 'pady': 5},
+            "unit_1_job_combo": {'button': self.combo_unit_1_job, 'row': 12, 'column': 4, 'padx': 5, 'pady': 5},
+            "unit_1_job_button": {'button': self.unit_1_job_button, 'row': 13, 'column': 4, 'padx': 5, 'pady': 5},
         }
 
         self.unit_1_unit_labels = {
@@ -203,11 +211,19 @@ class Window:
             "crt_label": {'label': self.unit_1_weapon_crt_label, 'row': 16, 'column':3, 'padx': 5, 'pady': 5},
         }
 
+        self.unit_1_terrain_labels = {
+            "terrain_type_label": {'label': self.unit_1_terrain_type_label, 'row': 17, 'column': 3, 'padx': 5, 'pady': 5},
+            "terrain_def_label": {'label': self.unit_1_terrain_def_label, 'row': 18, 'column': 3, 'padx': 5, 'pady': 5},
+            "terrain_avoid_label": {'label': self.unit_1_terrain_avoid_label, 'row': 19, 'column': 3, 'padx': 5, 'pady': 5},
+        }
+
         for button_info in self.unit_1_buttons_combobox.values():
             button_info['button'].grid(row=button_info['row'], column=button_info['column'], padx=button_info['padx'], pady=button_info['pady'])
         for label_info in self.unit_1_unit_labels.values():
             label_info['label'].grid(row=label_info['row'], column=label_info['column'], padx=button_info['padx'], pady=button_info['pady'])
         for label_info in self.unit_1_weapon_labels.values():
+            label_info['label'].grid(row=label_info['row'], column=label_info['column'], padx=button_info['padx'], pady=button_info['pady'])
+        for label_info in self.unit_1_terrain_labels.values():
             label_info['label'].grid(row=label_info['row'], column=label_info['column'], padx=button_info['padx'], pady=button_info['pady'])
 
         self.unit_2_buttons_combobox = {
@@ -215,14 +231,16 @@ class Window:
             "unit_2_button": {'button': self.unit_2_button, 'row': 1, 'column': 0, 'padx': 5, 'pady': 5},
             "unit_2_weapon_combo": {'button': self.combo_unit_2_weapon, 'row': 2, 'column': 0, 'padx': 5, 'pady': 5},
             "unit_2_weapon_button": {'button': self.unit_2_weapon_button, 'row': 3, 'column': 0, 'padx': 5, 'pady': 5},
-            "unit_2_promotion_combo": {'button': self.combo_unit_2_promotions, 'row': 4, 'column': 0, 'padx': 5, 'pady': 5},
-            "unit_2_promotion_button": {'button': self.unit_2_promotions_button, 'row': 5, 'column': 0, 'padx': 5, 'pady': 5},
-            "unit_2_level_label": {'button': self.unit_2_level_up_label, 'row': 7, 'column': 0, 'padx': 5, 'pady': 5},
-            "unit_2_level_entry": {'button': self.unit_2_level_up_entry, 'row': 8, 'column': 0, 'padx': 5, 'pady': 5},
-            "unit_2_level_button": {'button': self.unit_2_level_up_sub_btn, 'row': 9, 'column': 0, 'padx': 5, 'pady': 5},
-            "unit_2_checkbutton": {'button': self.unit_2_checkbutton, 'row': 10, 'column': 0, 'padx': 5, 'pady': 5},
-            "unit_2_job_combo": {'button': self.combo_unit_2_job, 'row': 11, 'column': 0, 'padx': 5, 'pady': 5},
-            "unit_2_job_button": {'button': self.unit_2_job_button, 'row': 12, 'column': 0, 'padx': 5, 'pady': 5},
+            "unit_2_level_label": {'button': self.unit_2_level_up_label, 'row': 4, 'column': 0, 'padx': 5, 'pady': 5},
+            "unit_2_level_entry": {'button': self.unit_2_level_up_entry, 'row': 5, 'column': 0, 'padx': 5, 'pady': 5},
+            "unit_2_level_button": {'button': self.unit_2_level_up_sub_btn, 'row': 6, 'column': 0, 'padx': 5, 'pady': 5},
+            "unit_2_promotion_combo": {'button': self.combo_unit_2_promotions, 'row': 7, 'column': 0, 'padx': 5, 'pady': 5},
+            "unit_2_promotion_button": {'button': self.unit_2_promotions_button, 'row': 8, 'column': 0, 'padx': 5, 'pady': 5},
+            "unit_2_terrain_combo": {'button': self.combo_unit_2_terrain, 'row': 9, 'column': 0, 'padx': 5, 'pady': 5},
+            "unit_2_terrain_button": {'button': self.unit_2_terrain_button, 'row': 10, 'column': 0, 'padx': 5, 'pady': 5},
+            "unit_2_checkbutton": {'button': self.unit_2_checkbutton, 'row': 11, 'column': 0, 'padx': 5, 'pady': 5},
+            "unit_2_job_combo": {'button': self.combo_unit_2_job, 'row': 12, 'column': 0, 'padx': 5, 'pady': 5},
+            "unit_2_job_button": {'button': self.unit_2_job_button, 'row': 13, 'column': 0, 'padx': 5, 'pady': 5},
         }
 
         self.unit_2_unit_labels = {
@@ -247,6 +265,12 @@ class Window:
             "hit_label": {'label': self.unit_2_weapon_hit_label, 'row': 15, 'column':1, 'padx': 5, 'pady': 5},
             "crt_label": {'label': self.unit_2_weapon_crt_label, 'row': 16, 'column':1, 'padx': 5, 'pady': 5},
         }
+        
+        self.unit_2_terrain_labels = {
+            "terrain_type_label": {'label': self.unit_2_terrain_type_label, 'row': 17, 'column': 1, 'padx': 5, 'pady': 5},
+            "terrain_def_label": {'label': self.unit_2_terrain_def_label, 'row': 18, 'column': 1, 'padx': 5, 'pady': 5},
+            "terrain_avoid_label": {'label': self.unit_2_terrain_avoid_label, 'row': 19, 'column': 1, 'padx': 5, 'pady': 5},
+        }
 
         for button_info in self.unit_2_buttons_combobox.values():
             button_info['button'].grid(row=button_info['row'], column=button_info['column'], padx=button_info['padx'], pady=button_info['pady'])
@@ -254,12 +278,14 @@ class Window:
             label_info['label'].grid(row=label_info['row'], column=label_info['column'], padx=button_info['padx'], pady=button_info['pady'])
         for label_info in self.unit_2_weapon_labels.values():
             label_info['label'].grid(row=label_info['row'], column=label_info['column'], padx=button_info['padx'], pady=button_info['pady'])
+        for label_info in self.unit_2_terrain_labels.values():
+            label_info['label'].grid(row=label_info['row'], column=label_info['column'], padx=button_info['padx'], pady=button_info['pady'])
 
-        # Create logger window 
+        # Create battle window  & button
 
-        self.log_widget = ScrolledText(self.battle_window_frame, height=20, width=60, font=("Arial", "12", "normal"))
-        self.log_widget.grid(row=0, column=2, rowspan=16, sticky='ns', padx=20)
-        self.redirect_console()
+        self.battle_window = ScrolledText(self.battle_window_frame, height=20, width=60, font=("Arial", "12", "normal"))
+        self.battle_window.grid(row=0, column=2, rowspan=16, sticky='ns', padx=20)
+        self.battle_button.grid(row=18, column=2, pady=20)
 
         # Set window size
 
@@ -276,8 +302,6 @@ class Window:
         self.unit_2_job_button.grid_remove()
         self.combo_unit_2_job.grid_remove()
         
-
-
     def redraw(self):
         self.__root.update_idletasks()
         self.__root.update()
@@ -286,7 +310,6 @@ class Window:
         self.__is_running = True  
         while self.__is_running:
             self.redraw()
-        self.reset_logging()
         print("Window Closed")
 
     def close(self):
@@ -308,6 +331,8 @@ class Window:
         self.unit_1_level_up_sub_btn.config(state='normal')
         self.unit_1_checkbutton.config(state='normal')
         self.unit_1_level_up_entry.config(state='normal')
+        self.unit_1_terrain_button.config(state='normal')
+        self.combo_unit_1_terrain.config(state='normal')
 
     def on_unit_1_button_toggle(self):
         if self.unit_1_var.get() == 1:
@@ -333,6 +358,8 @@ class Window:
         self.unit_2_level_up_sub_btn.config(state='normal')
         self.unit_2_checkbutton.config(state='normal')
         self.unit_2_level_up_entry.config(state='normal')
+        self.unit_2_terrain_button.config(state='normal')
+        self.combo_unit_2_terrain.config(state='normal')
 
     def on_unit_2_button_toggle(self):
         if self.unit_2_var.get() == 1:
@@ -351,20 +378,29 @@ class Window:
         self.update_promotions_list(unit, promotions_combobox)
         self.update_unit_display()
     
-    def apply_weapon(self, unit, weapon_clicked, label_dict):
+    def apply_weapon(self, unit, weapon_clicked):
         weapon = weapon_clicked.get()
         unit_weapon = weapons[weapon]
-        unit.assign_weapon(unit_weapon)
-
-
+        unit.assign_weapon(unit_weapon, self.battle_window)
         self.update_unit_display()
 
     def apply_promotion(self, unit, promotion_clicked, promotion_combobox):
         target_job = promotion_clicked.get()
-        unit.promote(target_job)
+        unit.promote(target_job, self.battle_window)
         self.update_promotions_list(unit, promotion_combobox)
         self.update_unit_display()
 
+    def apply_level_up(self, unit, level_var):
+        target_level = level_var.get()
+        unit.set_level(self.battle_window, int(target_level))
+        level_var.set("")
+        self.update_unit_display()
+
+    def apply_terrain(self, unit, terrain_clicked):
+        terrain_selection = terrain_clicked.get()
+        unit_terrain = terrain[terrain_selection]
+        unit.assign_terrain(unit_terrain)
+        self.update_unit_display()
 
     def update_unit_display(self):
         if self.unit_1 is not None:
@@ -388,6 +424,10 @@ class Window:
                 self.unit_1_weapon_mt_label.config(text = "Mt: " + str(self.unit_1.weapon.mt))
                 self.unit_1_weapon_hit_label.config(text = "Hit: " + str(self.unit_1.weapon.hit))
                 self.unit_1_weapon_crt_label.config(text = "Crt: " + str(self.unit_1.weapon.crt))
+            if self.unit_1.terrain is not None:
+                self.unit_1_terrain_type_label.config(text = "Terrain: " + self.unit_1.terrain.name)
+                self.unit_1_terrain_def_label.config(text = "Def Bonus: " + str(self.unit_1.terrain.def_bonus))
+                self.unit_1_terrain_avoid_label.config(text = "Avoid Bonus: " + str(self.unit_1.terrain.avoid))
         
         if self.unit_2 is not None:
             self.unit_2_name_label.config(text = "Name: " + self.unit_2.name)
@@ -410,12 +450,14 @@ class Window:
                 self.unit_2_weapon_mt_label.config(text = "Mt: " + str(self.unit_2.weapon.mt))
                 self.unit_2_weapon_hit_label.config(text = "Hit: " + str(self.unit_2.weapon.hit))
                 self.unit_2_weapon_crt_label.config(text = "Crt: " + str(self.unit_2.weapon.crt))
-    
-    def apply_level_up(self, unit, level_var):
-        target_level = level_var.get()
-        unit.set_level(int(target_level))
-        level_var.set("")
-        self.update_unit_display()
+            if self.unit_2.terrain is not None:
+                self.unit_2_terrain_type_label.config(text = "Terrain: " + self.unit_2.terrain.name)
+                self.unit_2_terrain_def_label.config(text = "Def Bonus: " + str(self.unit_2.terrain.def_bonus))
+                self.unit_2_terrain_avoid_label.config(text = "Avoid Bonus: " + str(self.unit_2.terrain.avoid))
+
+        if self.unit_1 is not None and self.unit_2 is not None:
+            if self.unit_1.weapon is not None and self.unit_1.terrain is not None and self.unit_2.weapon is not None and self.unit_2.terrain is not None:
+                self.battle_button.config(command=self.start_unit_battle, state='normal')
 
     def update_weapons_list(self, unit, weapon_combobox = None):
         valid_weapons = [weapon_key for weapon_key in weapons.keys()
@@ -434,15 +476,7 @@ class Window:
         else:
             return valid_jobs
         
-
-    def reset_logging(self):
-        sys.stdout = sys.__stdout__
-        sys.stderr = sys.__stderr__
-
-    def test_print(self):
-        print("Test Print")
-    
-    def redirect_console(self):
-        console = Console(self.log_widget)
-        sys.stdout = console
-        sys.stderr = console
+    def start_unit_battle(self):
+        battle = Battle(self.unit_1, self.unit_2, self.battle_window)
+        battle.start_battle()
+        

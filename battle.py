@@ -1,50 +1,77 @@
-import time
+import tkinter as tk
 
-def battle(unit_1, unit_2):
+class Battle:
+    def __init__(self, unit_1, unit_2, battle_window):
+        self.unit_1 = unit_1
+        self.unit_2 = unit_2
+        self.battle_window = battle_window
+
+    def start_battle(self):
         # Calculate weapon advantage
-        unit_1.weapon.calculate_weapon_triangle(unit_2.weapon)
+        self.unit_1.weapon.calculate_weapon_triangle(self.unit_2.weapon, self.battle_window)
 
         # Calculate effective damage (e.g. bows vs flying)
-        unit_1.weapon.calculate_effective_damage(unit_2.job)
-        unit_2.weapon.calculate_effective_damage(unit_1.job)
+        self.unit_1.weapon.calculate_effective_damage(self.unit_2.job, self.battle_window)
+        self.unit_2.weapon.calculate_effective_damage(self.unit_1.job, self.battle_window)
 
         # Calculate speed for accuracy & double strike used in attack
-        unit_1_attack_speed = unit_1.calculate_attack_speed()
-        unit_2_attack_speed = unit_2.calculate_attack_speed()
+        self.unit_1_attack_speed = self.unit_1.calculate_attack_speed()
+        self.unit_2_attack_speed = self.unit_2.calculate_attack_speed()
 
-        while unit_1.hp > 0 and unit_2.hp > 0:
-            print(f"{unit_1.name} attacks {unit_2.name}")
-            unit_1.attack(unit_2)
-            print(f"{unit_2.name}'s HP: {unit_2.hp}\n")
-            if unit_2.hp == 0:
-                break
-            time.sleep(3)
+        self.do_first_battle_step()
 
-            print(f"{unit_2.name} attacks {unit_1.name}")
-            unit_2.attack(unit_1)
-            print(f"{unit_1.name}'s HP: {unit_1.hp}\n")
-            if unit_1.hp == 0:
-                break
-            time.sleep(3)
+    def do_first_battle_step(self):
+        self.battle_window.insert(tk.END, f"{self.unit_1.name} attacks {self.unit_2.name}\n")
+        self.battle_window.see(tk.END)
+        self.unit_1.attack(self.unit_2, self.battle_window)
+        self.battle_window.insert(tk.END, f"{self.unit_2.name}'s HP: {self.unit_2.hp}\n\n")
+        self.battle_window.see(tk.END)
+        if self.unit_2.hp != 0:
+            self.battle_window.after(3000, self.do_second_battle_step)
+        else:
+            self.battle_window.insert(tk.END, f"{self.unit_2.name} has been defeated!\n")
+            self.battle_window.see(tk.END)
 
-            # Check for double attack
-
-            if unit_1_attack_speed - unit_2_attack_speed >= 4:
-                print(f"{unit_1.name}'s follow up!")
-                print(f"{unit_1.name} attacks {unit_2.name}")
-                unit_1.attack(unit_2)
-                print(f"{unit_2.name}'s HP: {unit_2.hp}\n")
-                time.sleep(3)
-
-            elif unit_2_attack_speed - unit_1_attack_speed >= 4:
-                print(f"{unit_2.name}'s follow up!")
-                print(f"{unit_2.name} attacks {unit_1.name}")
-                unit_2.attack(unit_1)
-                print(f"{unit_1.name}'s HP: {unit_1.hp}\n")
-                time.sleep(3)
+    def do_second_battle_step(self):
+        self.battle_window.insert(tk.END, f"{self.unit_2.name} attacks {self.unit_1.name}\n")
+        self.battle_window.see(tk.END)
+        self.unit_2.attack(self.unit_1, self.battle_window)
+        self.battle_window.insert(tk.END, f"{self.unit_1.name}'s HP: {self.unit_1.hp}\n\n")
+        self.battle_window.see(tk.END)
+        if self.unit_1.hp != 0:
+            self.battle_window.after(3000, self.do_follow_up)
+        else:
+            self.battle_window.insert(tk.END, f"{self.unit_1.name} has been defeated!\n")
+            self.battle_window.see(tk.END)
+    
+    def do_follow_up(self):
+        if self.unit_1_attack_speed - self.unit_2_attack_speed >= 4:
+            self.battle_window.insert(tk.END, f"{self.unit_1.name}'s follow up!\n") 
+            self.battle_window.see(tk.END)
+            self.battle_window.insert(tk.END, f"{self.unit_1.name} attacks {self.unit_2.name}\n")
+            self.battle_window.see(tk.END)
+            self.unit_1.attack(self.unit_2, self.battle_window)
+            self.battle_window.insert(tk.END, f"{self.unit_2.name}'s HP: {self.unit_2.hp}\n\n")
+            self.battle_window.see(tk.END)
+            if self.unit_2.hp != 0:
+                self.battle_window.after(3000, self.do_first_battle_step)
+            else:
+                self.battle_window.insert(tk.END, f"{self.unit_2.name} has been defeated!\n")
+                self.battle_window.see(tk.END)
         
-        if unit_1.hp == 0:
-            print(f"{unit_1.name} has been defeated!")
+        elif self.unit_2_attack_speed - self.unit_1_attack_speed >= 4:
+            self.battle_window.insert(tk.END, f"{self.unit_2.name}'s follow up!\n") 
+            self.battle_window.see(tk.END)
+            self.battle_window.insert(tk.END, f"{self.unit_2.name} attacks {self.unit_1.name}\n")
+            self.battle_window.see(tk.END)
+            self.unit_2.attack(self.unit_1, self.battle_window)
+            self.battle_window.insert(tk.END, f"{self.unit_1.name}'s HP: {self.unit_1.hp}\n\n")
+            self.battle_window.see(tk.END)
+            if self.unit_1.hp != 0:
+                self.battle_window.after(3000, self.do_first_battle_step)
+            else:
+                self.battle_window.insert(tk.END, f"{self.unit_1.name} has been defeated!\n")
+                self.battle_window.see(tk.END)
         
-        elif unit_2.hp == 0:
-            print(f"{unit_2.name} has been defeated!")
+        else:
+            self.battle_window.after(3000, self.do_first_battle_step)

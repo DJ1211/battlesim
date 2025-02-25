@@ -1,4 +1,5 @@
 from dicts import weapons
+import tkinter as tk
 
 class Weapon:
     def __init__(self, weapon):
@@ -13,9 +14,10 @@ class Weapon:
         self.invert_triangle = weapon["invert_triangle"] == "True"
         self.other_effect = weapon["other_effect"]
 
-    def calculate_weapon_triangle(self, target):
+    def calculate_weapon_triangle(self, target, battle_window):
         if self.invert_triangle == True or target.invert_triangle == True:
-            print("TRIANGLE INVERTED")      
+            battle_window.insert(tk.END, "TRIANGLE INVERTED\n\n")
+            battle_window.see(tk.END)     
             self.type, target.type = target.type, self.type
 
         # +15 accuracy for advantage, -15 for disadvantage
@@ -67,8 +69,9 @@ class Weapon:
                 self.hit -=15
                 target.hit += 15
 
-    def calculate_effective_damage(self, target):
-        if self.effective_against != None:
+    def calculate_effective_damage(self, target, battle_window):
+        if self.effective_against != "None":
             if target.type_1 in self.effective_against or target.type_2 in self.effective_against:
-                print(f"{self.name} is effective against {target.name}")
+                battle_window.insert(tk.END, f"{self.name} is effective against {target.name}\n\n")
+                battle_window.see(tk.END)
                 self.mt *= 3

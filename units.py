@@ -4,6 +4,7 @@ from jobs import Job
 from terrain import Terrain
 import random
 import time
+import tkinter as tk
 
 class Unit:
     def __init__(self, unit):
@@ -51,12 +52,13 @@ class Unit:
         self.job = Job(job)
         self.job.apply_stats(self)
 
-    def assign_weapon(self, weapon):
+    def assign_weapon(self, weapon, battle_window):
         unit_weapon = Weapon(weapon)
         if unit_weapon.type in self.job.weapon_types:
             self.weapon = Weapon(weapon)
         else:
-            print("Invalid Weapon")
+            battle_window.insert(tk.END, "Invalid Weapon\n\n")
+            battle_window.see(tk.END)  
 
     def assign_terrain(self, terrain):
         self.terrain = Terrain(terrain)
@@ -66,7 +68,6 @@ class Unit:
         base_hit_rate = self.weapon.hit + (self.skl * 2) + (self.lck // 2)
         target_attack_speed = target.calculate_attack_speed()
         
-        # Terrain to be added later
         avoid_rate = (target_attack_speed * 2) + target.lck + target.terrain.avoid
 
         hit_rate = base_hit_rate - avoid_rate
@@ -89,7 +90,7 @@ class Unit:
         return attack_speed
     
     def calculate_critical(self):
-        # No supports. Crit bonus to be added later?
+        # No supports. Crit bonus to be added later
         crit_chance = self.rng()
         crit_rate = self.weapon.crt + (self.skl // 2)
         if crit_chance >= crit_rate:
@@ -97,7 +98,7 @@ class Unit:
         else:
             return True
 
-    def attack(self, target):
+    def attack(self, target, battle_window):
         if self.calculate_hit(target):
             damage = (self.str + self.weapon.mt)
 
@@ -107,12 +108,14 @@ class Unit:
                 damage -= target.res - target.terrain.def_bonus
 
             if self.calculate_critical():
-                print("Critical Hit!")
+                battle_window.insert(tk.END, "Critical Hit!\n")
+                battle_window.see(tk.END)
                 damage *= 3
 
             if damage < 0:
                 damage = 0
-            print(f"Damage: {damage}")
+            battle_window.insert(tk.END, f"Damage: {damage}\n")
+            battle_window.see(tk.END)
 
             target.hp = target.hp - damage
 
@@ -120,26 +123,30 @@ class Unit:
                 target.hp = 0
             return target.hp
         
-        print("Miss!")
+        battle_window.insert(tk.END, "Miss!\n")
+        battle_window.see(tk.END)
 
-    def set_level(self, value = None):
+    def set_level(self, battle_window, value = None):
         # Records the starting level to be used in applying stats and then raises the level to the intended level
 
         starting_level = self.level
         if value == None:
             return
         if value <= self.level:
-            print("Cannot lower level")
+            battle_window.insert(tk.END, "Cannot lower level\n\n")
+            battle_window.see(tk.END)  
             return
         if 1 <= value <= self.job.max_level:
-            print(f"Setting {self.name} to level {value}\n")
+            battle_window.insert(tk.END, f"Setting {self.name} to level {value}\n\n")
+            battle_window.see(tk.END)  
             self.level = value
         else:
-            print("Invalid Level")
+            battle_window.insert(tk.END, "Invalid Level\n\n")
+            battle_window.see(tk.END)  
         
-        self.calculate_level_up(starting_level)
+        self.calculate_level_up(starting_level, battle_window)
             
-    def calculate_level_up(self, starting_level):
+    def calculate_level_up(self, starting_level, battle_window):
         hp_counter = 0
         str_counter = 0
         skl_counter = 0
@@ -205,37 +212,35 @@ class Unit:
                 else:
                     res_counter += 1
         
-        print(f"HP +{hp_counter}")
-        print(f"Str +{str_counter}")
-        print(f"Skl +{skl_counter}")
-        print(f"Spd +{spd_counter}")
-        print(f"Lck +{lck_counter}")
-        print(f"Def +{def_counter}")
-        print(f"Res +{res_counter}")
-        print("\n")
+        battle_window.insert(tk.END, f"HP +{hp_counter}\n") 
+        battle_window.insert(tk.END, f"Str +{str_counter}\n") 
+        battle_window.insert(tk.END, f"Skl +{skl_counter}\n") 
+        battle_window.insert(tk.END, f"Spd +{spd_counter}\n") 
+        battle_window.insert(tk.END, f"Lck +{lck_counter}\n") 
+        battle_window.insert(tk.END, f"Def +{def_counter}\n") 
+        battle_window.insert(tk.END, f"Res +{res_counter}\n\n") 
+        battle_window.see(tk.END)  
 
-    def promote(self, target_job):
+    def promote(self, target_job, battle_window):
         if self.level >= 10:
-            print(f"Promoting from {self.job.name} to {target_job}")
+            battle_window.insert(tk.END, f"Promoting {self.name} from {self.job.name} to {target_job}\n\n") 
+            battle_window.see(tk.END)  
             self.job = Job(jobs[target_job])
-            print(f"HP +{self.job.hp_promote}")
-            print(f"Str +{self.job.str_promote}")
-            print(f"Skl +{self.job.skl_promote}")
-            print(f"Spd +{self.job.spd_promote}")
-            print(f"Def +{self.job.def_promote}")
-            print(f"Res +{self.job.res_promote}")
-            print(f"Con +{self.job.con_promote}")
-            print("\n")
+            battle_window.insert(tk.END, f"HP +{self.job.hp_promote}\n") 
+            battle_window.insert(tk.END, f"Str +{self.job.str_promote}\n") 
+            battle_window.insert(tk.END, f"Skl +{self.job.skl_promote}\n") 
+            battle_window.insert(tk.END, f"Spd +{self.job.spd_promote}\n") 
+            battle_window.insert(tk.END, f"Def +{self.job.def_promote}\n") 
+            battle_window.insert(tk.END, f"Res +{self.job.res_promote}\n") 
+            battle_window.insert(tk.END, f"Res +{self.job.con_promote}\n\n") 
+            battle_window.see(tk.END)  
             self.job.apply_promotion(self)
             self.level = 1
         else:
-            print("Cannot Promote")
-
+            battle_window.insert(tk.END, "Cannot Promote\n\n") 
+            battle_window.see(tk.END)  
          
     def rng(self):
         rand1 = random.randint(0, 99)
         rand2 = random.randint(0, 99)
         return (rand1 + rand2) // 2
-
-    def test(self):
-        print("Create Unit")

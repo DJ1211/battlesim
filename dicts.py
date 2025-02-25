@@ -1,4 +1,4 @@
-# Dictionaries to use for testing. Once basics are sorted, import from CSV?
+# Add check that path is valid
 
 import os
 import csv
