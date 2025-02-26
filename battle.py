@@ -20,6 +20,7 @@ class Battle:
         self.unit_1_attack_speed = self.unit_1.calculate_attack_speed()
         self.unit_2_attack_speed = self.unit_2.calculate_attack_speed()
 
+
         self.window.update_unit_display()
 
         self.do_first_battle_step()
@@ -34,7 +35,7 @@ class Battle:
         if self.unit_2.hp != 0:
             self.battle_window.after(3000, self.do_second_battle_step)
         else:
-            self.battle_window.insert(tk.END, f"{self.unit_2.name} has been defeated!\n")
+            self.battle_window.insert(tk.END, f"{self.unit_2.name} has been defeated!\n\n")
             self.battle_window.see(tk.END)
             self.button.config(text="Battle!", state="normal")
             self.window.battle_in_progress = False
@@ -50,7 +51,7 @@ class Battle:
         if self.unit_1.hp != 0:
             self.battle_window.after(3000, self.do_follow_up)
         else:
-            self.battle_window.insert(tk.END, f"{self.unit_1.name} has been defeated!\n")
+            self.battle_window.insert(tk.END, f"{self.unit_1.name} has been defeated!\n\n")
             self.battle_window.see(tk.END)
             self.button.config(text="Battle!", state="normal")
             self.window.battle_in_progress = False
@@ -68,7 +69,7 @@ class Battle:
             if self.unit_2.hp != 0:
                 self.battle_window.after(3000, self.do_first_battle_step)
             else:
-                self.battle_window.insert(tk.END, f"{self.unit_2.name} has been defeated!\n")
+                self.battle_window.insert(tk.END, f"{self.unit_2.name} has been defeated!\n\n")
                 self.battle_window.see(tk.END)
                 self.button.config(text="Battle!", state="normal")
                 self.window.battle_in_progress = False
@@ -85,7 +86,7 @@ class Battle:
             if self.unit_1.hp != 0:
                 self.battle_window.after(3000, self.do_first_battle_step)
             else:
-                self.battle_window.insert(tk.END, f"{self.unit_1.name} has been defeated!\n")
+                self.battle_window.insert(tk.END, f"{self.unit_1.name} has been defeated!\n\n")
                 self.battle_window.see(tk.END)
                 self.button.config(text="Battle!", state="normal")
                 self.window.battle_in_progress = False

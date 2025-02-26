@@ -37,7 +37,7 @@ class Unit:
         self.base_defence = self.defence
         self.base_res = self.res
         self.base_con = self.con
-        self.final_damage = None
+        self.damage = None
         self.hit_rate = None
         self.crit_rate = None
         self.assign_job(jobs[self.job])
@@ -65,9 +65,12 @@ class Unit:
 
     def assign_terrain(self, terrain):
         self.terrain = Terrain(terrain)
+        if self.job.type_1 == "Flying" or self.job.type_2 == "Flying":
+            self.terrain.avoid = 0
+            self.terrain.def_bonus = 0
     
     def calculate_hit(self, target):
-        # No support bonus to be considered
+        
         base_hit_rate = self.weapon.hit + (self.skl * 2) + (self.lck // 2)
         target_attack_speed = target.calculate_attack_speed()
         
@@ -113,31 +116,30 @@ class Unit:
             return False
         else:
             return True
+        
+    def calculate_damage(self, target):
+        self.damage = (self.str + self.weapon.mt)
+
+        if self.weapon.magic == False:
+            self.damage -= target.defence + target.terrain.def_bonus
+        else:
+            self.damage -= target.res + target.terrain.def_bonus
+
+        if self.damage < 0:
+            self.damage = 0
 
     def attack(self, target, battle_window):
-        if self.calculate_hit(target):
-            damage = (self.str + self.weapon.mt)
-
-            if self.weapon.magic == False:
-                damage -= target.defence + target.terrain.def_bonus
-            else:
-                damage -= target.res + target.terrain.def_bonus
-
-            self.final_damage = damage
-            if self.final_damage < 0:
-                self.final_damage = 0
+        if self.calculate_hit(target):     
 
             if self.calculate_critical():
                 battle_window.insert(tk.END, "Critical Hit!\n")
                 battle_window.see(tk.END)
-                damage *= 3
+                self.damage *= 3
 
-            if damage < 0:
-                damage = 0
-            battle_window.insert(tk.END, f"Damage: {damage}\n")
+            battle_window.insert(tk.END, f"Damage: {self.damage}\n")
             battle_window.see(tk.END)
 
-            target.hp = target.hp - damage
+            target.hp = target.hp - self.damage
 
             if target.hp < 0:
                 target.hp = 0
