@@ -37,6 +37,9 @@ class Unit:
         self.base_defence = self.defence
         self.base_res = self.res
         self.base_con = self.con
+        self.final_damage = None
+        self.hit_rate = None
+        self.crit_rate = None
         self.assign_job(jobs[self.job])
     
     def assign_job(self, job):
@@ -73,6 +76,12 @@ class Unit:
         hit_rate = base_hit_rate - avoid_rate
         hit_value = self.rng()
 
+        self.hit_rate = hit_rate
+        if self.hit_rate > 100:
+            self.hit_rate = 100
+        if self.hit_rate < 0:
+            self.hit_rate = 0
+
         if hit_value >= hit_rate:
             return False
         else:
@@ -93,6 +102,13 @@ class Unit:
         # No supports. Crit bonus to be added later
         crit_chance = self.rng()
         crit_rate = self.weapon.crt + (self.skl // 2)
+
+        self.crit_rate = crit_rate
+        if self.crit_rate > 100:
+            self.crit_rate = 100
+        if self.crit_rate < 0:
+            self.crit_rate = 0
+
         if crit_chance >= crit_rate:
             return False
         else:
@@ -103,9 +119,13 @@ class Unit:
             damage = (self.str + self.weapon.mt)
 
             if self.weapon.magic == False:
-                damage -= target.defence - target.terrain.def_bonus
+                damage -= target.defence + target.terrain.def_bonus
             else:
-                damage -= target.res - target.terrain.def_bonus
+                damage -= target.res + target.terrain.def_bonus
+
+            self.final_damage = damage
+            if self.final_damage < 0:
+                self.final_damage = 0
 
             if self.calculate_critical():
                 battle_window.insert(tk.END, "Critical Hit!\n")
