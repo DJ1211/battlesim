@@ -54,11 +54,13 @@ class Unit:
         self.con = self.base_con
         self.job = Job(job)
         self.job.apply_stats(self)
+        self.apply_slayer_bonus()
 
     def assign_weapon(self, weapon, battle_window):
         unit_weapon = Weapon(weapon)
         if unit_weapon.type in self.job.weapon_types:
             self.weapon = Weapon(weapon)
+            self.apply_weapon_bonus()
         else:
             battle_window.insert(tk.END, "Invalid Weapon\n\n")
             battle_window.see(tk.END)  
@@ -68,9 +70,43 @@ class Unit:
         if self.job.type_1 == "Flying" or self.job.type_2 == "Flying":
             self.terrain.avoid = 0
             self.terrain.def_bonus = 0
+
+    def apply_weapon_bonus(self):
+        if self.weapon.other_effect == "str +5":
+            self.str += 5
+        if self.weapon.other_effect == "skl +5":
+            self.skl += 5
+        if self.weapon.other_effect == "spd +5":
+            self.spd += 5
+        if self.weapon.other_effect == "def +5":
+            self.defence += 5
+        if self.weapon.other_effect == "res +5":
+            self.res += 5
+        if self.weapon.other_effect == "lck +5":
+            self.lck += 5
+        if self.weapon.other_effect == "Dragonstone Stats":
+            self.str += 15
+            self.skl += 12
+            self.defence += 15
+            self.res += 20
+        if self.weapon.other_effect == "Wretched Air Stats":
+            self.str += 10
+            self.skl += 10
+            self.defence += 20
+            self.res += 10
+        if self.weapon.other_effect == "Demon Light Stats":
+            self.str += 10
+            self.skl += 10
+            self.lck += 10
+            self.defence += 10
+            self.res += 15
+        if self.weapon.other_effect == "Ravager Stats":
+            self.str += 15
+            self.skl += 15
+            self.defence += 15
+            self.res += 15
     
     def calculate_hit(self, target):
-        
         base_hit_rate = self.weapon.hit + (self.skl * 2) + (self.lck // 2)
         target_attack_speed = target.calculate_attack_speed()
         
@@ -102,9 +138,10 @@ class Unit:
         return attack_speed
     
     def calculate_critical(self):
-        # No supports. Crit bonus to be added later
         crit_chance = self.rng()
         crit_rate = self.weapon.crt + (self.skl // 2)
+        if self.job.class_skill == "crit":
+            crit_rate += 15
 
         self.crit_rate = crit_rate
         if self.crit_rate > 100:
@@ -136,10 +173,23 @@ class Unit:
                 battle_window.see(tk.END)
                 self.damage *= 3
 
-            battle_window.insert(tk.END, f"Damage: {self.damage}\n")
-            battle_window.see(tk.END)
+            if self.weapon.other_effect == "Halve HP":
+                battle_window.insert(tk.END, f"{self.weapon.name} halves {target.name}'s hp\n")
+                battle_window.insert(tk.END, f"Damage: {self.damage}\n")
+                battle_window.see(tk.END)
+                target.hp = target.hp // 2
+            else:
+                battle_window.insert(tk.END, f"Damage: {self.damage}\n")
+                battle_window.see(tk.END)
+                target.hp -= self.damage
 
-            target.hp = target.hp - self.damage
+            if self.weapon.other_effect == "Lifesteal":
+                self.hp += self.damage
+                if self.hp > self.job.hp_cap:
+                    self.hp = self.job.hp_cap
+                battle_window.insert(tk.END, f"{self.name} heals: {self.damage}\n")
+                battle_window.see(tk.END)
+
 
             if target.hp < 0:
                 target.hp = 0
@@ -257,10 +307,15 @@ class Unit:
             battle_window.insert(tk.END, f"Res +{self.job.con_promote}\n\n") 
             battle_window.see(tk.END)  
             self.job.apply_promotion(self)
+            self.apply_slayer_bonus()
             self.level = 1
         else:
             battle_window.insert(tk.END, "Cannot Promote\n\n") 
             battle_window.see(tk.END)  
+
+    def apply_slayer_bonus(self):
+        if self.job.class_skill == "slayer":
+                self.weapon.effective_against = "Monster"
          
     def rng(self):
         rand1 = random.randint(0, 99)

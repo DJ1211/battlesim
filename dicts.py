@@ -16,8 +16,6 @@ with open ("./stat_sheets/weapons.csv", newline='') as weaponscsv:
         v = row
         if v["effective_against"] != "None":
             v["effective_against"] = v["effective_against"].split(", ")
-        if v["other_effect"] != "None":
-            v["other_effect"] = v["other_effect"].split(", ")
         weapons[k] = v
 
 with open ("./stat_sheets/units.csv", newline='') as unitscsv:

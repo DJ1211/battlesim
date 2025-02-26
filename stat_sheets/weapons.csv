@@ -90,9 +90,9 @@ Divine,12,8,85,10,light,None,True,False,None
 Purge,20,10,75,5,light,None,True,False,None
 Aura,15,12,85,15,light,None,True,False,None
 Ivaldi,10,17,90,5,light,Monster,True,False,def +5
-Wretched Air,0,10,100,0,monster,None,False,False,"str +10, skl +10, def +20, res +10, ignore defence"
-Demon Light,0,15,60,0,monster,None,True,False,"str +10, skl +10, lck +10, def +10, res +15"
-Ravager,0,15,85,10,monster,None,False,False,"str +15, skl +15, def +15, res +10"
+Wretched Air,0,10,100,0,monster,None,False,False,Wretched Air Stats
+Demon Light,0,15,60,0,monster,None,True,False,"Demon Light Stats, Ignore Defence"
+Ravager,0,15,85,10,monster,None,False,False,Ravager Stats
 Demon Surge,10,11,80,0,monster,None,True,False,None
 Shadowshot,20,13,70,5,monster,None,True,False,None
 Sharp Claw,14,14,65,0,monster,None,False,False,None
@@ -104,4 +104,4 @@ Fiery Fang,5,5,90,0,monster,None,False,False,None
 Hellfang,8,13,80,0,monster,None,False,False,None
 Evil Eye,6,7,85,0,monster,None,True,False,None
 Crimson Eye,13,14,70,5,monster,None,True,False,None
-Dragonstone,0,16,100,15,stone,Monster,False,False,"str +15, skl +12, def +15, res +20"
+Dragonstone,0,16,100,15,stone,Monster,False,False,Dragonstone Stats

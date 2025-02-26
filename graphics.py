@@ -487,6 +487,7 @@ class Window:
                 self.unit_1_weapon_wt_label.config(text = "Wt: None")
                 self.unit_1_weapon_hit_label.config(text = "Hit: None")
                 self.unit_1_weapon_crt_label.config(text = "Crt: None")
+                self.unit_1_weapon_effective_against_label.config(text = "Effective: None")
             if self.unit_1.terrain is not None:
                 self.unit_1_terrain_type_label.config(text = "Terrain: " + self.unit_1.terrain.name)
                 self.unit_1_terrain_def_label.config(text = "Def Bonus: " + str(self.unit_1.terrain.def_bonus))
@@ -533,6 +534,7 @@ class Window:
                 self.unit_2_weapon_wt_label.config(text = "Wt: None")
                 self.unit_2_weapon_hit_label.config(text = "Hit: None")
                 self.unit_2_weapon_crt_label.config(text = "Crt: None")
+                self.unit_2_weapon_effective_against_label.config(text = "Effective: None")
             if self.unit_2.terrain is not None:
                 self.unit_2_terrain_type_label.config(text = "Terrain: " + self.unit_2.terrain.name)
                 self.unit_2_terrain_def_label.config(text = "Def Bonus: " + str(self.unit_2.terrain.def_bonus))
