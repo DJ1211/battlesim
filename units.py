@@ -107,7 +107,9 @@ class Unit:
             self.res += 15
     
     def calculate_hit(self, target):
-        base_hit_rate = self.weapon.hit + (self.skl * 2) + (self.lck // 2)
+        weapon_hit = self.weapon.calculate_weapon_triangle(target.weapon)
+
+        base_hit_rate = weapon_hit + (self.skl * 2) + (self.lck // 2)
         target_attack_speed = target.calculate_attack_speed()
         
         avoid_rate = (target_attack_speed * 2) + target.lck + target.terrain.avoid
@@ -121,10 +123,10 @@ class Unit:
         if self.hit_rate < 0:
             self.hit_rate = 0
 
-        if hit_value >= hit_rate:
-            return False
-        else:
+        if hit_value < hit_rate:
             return True
+        else:
+            return False
     
     def calculate_attack_speed(self):
         speed_penalty = self.weapon.wt - self.con
@@ -149,35 +151,106 @@ class Unit:
         if self.crit_rate < 0:
             self.crit_rate = 0
 
-        if crit_chance >= crit_rate:
-            return False
-        else:
+        if crit_chance < crit_rate:
             return True
+        else:
+            return False
         
-    def calculate_damage(self, target):
+    def calculate_damage(self, target, battle_window):
+        defence = target.defence
+        res = target.res
+
+        self.weapon.calculate_effective_damage(target.job, battle_window)
+
         self.damage = (self.str + self.weapon.mt)
 
+        if self.weapon.other_effect =="Ignore Res":
+                res = 0
+            
+        if self.weapon.other_effect == "Ignore Defence":
+                defence = 0
+
         if self.weapon.magic == False:
-            self.damage -= target.defence + target.terrain.def_bonus
+            self.damage -= defence + target.terrain.def_bonus
         else:
-            self.damage -= target.res + target.terrain.def_bonus
+            self.damage -= res + target.terrain.def_bonus
 
         if self.damage < 0:
             self.damage = 0
 
     def attack(self, target, battle_window):
-        if self.calculate_hit(target):     
+        hit = False
+
+        if self.job.class_skill == "Sure Strike":
+            activation_chance = self.level
+            activation_trigger = self.rng()
+            if activation_trigger < activation_chance:
+                battle_window.insert(tk.END, f"{self.name} activates Sure Strike!\n")
+                battle_window.see(tk.END)
+                hit = True
+            else:
+                hit = self.calculate_hit(target)  
+            
+        else:
+            hit = self.calculate_hit(target)     
+
+        if hit == True:
 
             if self.calculate_critical():
                 battle_window.insert(tk.END, "Critical Hit!\n")
                 battle_window.see(tk.END)
                 self.damage *= 3
 
-            if self.weapon.other_effect == "Halve HP":
+            damage = self.damage
+
+            if self.weapon.other_effect == "Devil":
+                backfire_chance = 31 - self.lck
+                backfire_activation = self.rng()
+                if backfire_activation < backfire_chance:
+                    battle_window.insert(tk.END, f"{self.weapon.name} backfires!\n")
+                    battle_window.insert(tk.END, f"Damage: {self.damage}\n")
+                    battle_window.see(tk.END)
+                    self.hp -= self.damage
+                    battle_window.insert(tk.END, f"{self.name}'s HP: {self.hp}\n")
+                else:
+                    battle_window.insert(tk.END, f"Damage: {self.damage}\n")
+                    battle_window.see(tk.END)
+                    target.hp -= self.damage
+
+            elif self.weapon.other_effect == "Halve HP":
                 battle_window.insert(tk.END, f"{self.weapon.name} halves {target.name}'s hp\n")
                 battle_window.insert(tk.END, f"Damage: {self.damage}\n")
                 battle_window.see(tk.END)
                 target.hp = target.hp // 2
+
+            elif self.job.class_skill == "Pierce":
+                pierce_chance = self.level
+                pierce_trigger = self.rng()
+                if pierce_trigger < pierce_chance:
+                    damage = self.damage + target.defence
+                    battle_window.insert(tk.END, f"{self.name} activates Pierce!\n")
+                    battle_window.insert(tk.END, f"Damage: {damage}\n")
+                    battle_window.see(tk.END)
+                    target.hp -= damage
+                else:
+                    battle_window.insert(tk.END, f"Damage: {self.damage}\n")
+                    battle_window.see(tk.END)
+                    target.hp -= self.damage
+            
+            elif target.job.class_skill == "Great Shield":
+                shield_chance = self.level
+                shield_trigger = self.rng()
+                if shield_trigger < shield_chance:
+                    damage = 0
+                    battle_window.insert(tk.END, f"{target.name} activates Great Shield!\n")
+                    battle_window.insert(tk.END, f"Damage: {damage}\n")
+                    battle_window.see(tk.END)
+                    target.hp -= damage
+                else:
+                    battle_window.insert(tk.END, f"Damage: {self.damage}\n")
+                    battle_window.see(tk.END)
+                    target.hp -= self.damage
+            
             else:
                 battle_window.insert(tk.END, f"Damage: {self.damage}\n")
                 battle_window.see(tk.END)
@@ -189,7 +262,6 @@ class Unit:
                     self.hp = self.job.hp_cap
                 battle_window.insert(tk.END, f"{self.name} heals: {self.damage}\n")
                 battle_window.see(tk.END)
-
 
             if target.hp < 0:
                 target.hp = 0
@@ -314,7 +386,7 @@ class Unit:
             battle_window.see(tk.END)  
 
     def apply_slayer_bonus(self):
-        if self.job.class_skill == "slayer":
+        if self.job.class_skill == "Slayer":
                 self.weapon.effective_against = "Monster"
          
     def rng(self):

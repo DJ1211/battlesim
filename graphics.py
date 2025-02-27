@@ -12,6 +12,8 @@ class Window:
 
         self.unit_1 = None
         self.unit_2 = None
+        self.unit_1_attack_speed = None
+        self.unit_2_attack_speed = None
 
         self.battle_in_progress = False
       
@@ -74,7 +76,8 @@ class Window:
         self.unit_1_promotions_button = Button(self.unit_1_button_frame, text="Promote Unit",
                                                    command = lambda: self.apply_promotion(self.unit_1,
                                                                                         self.unit_1_promotion_clicked,
-                                                                                        self.combo_unit_1_promotions),
+                                                                                        self.combo_unit_1_promotions,
+                                                                                        self.combo_unit_1_weapon),
                                                     state='disabled')
         self.combo_unit_1_terrain = ttk.Combobox(self.unit_1_button_frame, textvariable=self.unit_1_terrain_clicked, values=self.terrain_list, state='disabled')
         self.unit_1_terrain_button = Button(self.unit_1_button_frame, text="Apply Terrain",
@@ -105,7 +108,8 @@ class Window:
         self.unit_2_promotions_button = Button(self.unit_2_button_frame, text="Promote Unit",
                                                    command = lambda: self.apply_promotion(self.unit_2,
                                                                                         self.unit_2_promotion_clicked,
-                                                                                        self.combo_unit_2_promotions),
+                                                                                        self.combo_unit_2_promotions,
+                                                                                        self.combo_unit_2_weapon),
                                                                                         state='disabled')
         self.combo_unit_2_terrain = ttk.Combobox(self.unit_2_button_frame, textvariable=self.unit_2_terrain_clicked, values=self.terrain_list, state='disabled')
         self.unit_2_terrain_button = Button(self.unit_2_button_frame, text="Apply Terrain",
@@ -127,63 +131,65 @@ class Window:
         
         # Create all labels
 
-        self.unit_1_label = Label(self.unit_1_label_frame, text = "Attacking Unit", font=('', 12, 'bold'), width=20)
-        self.unit_1_name_label = Label(self.unit_1_label_frame, text = "Name: None", width=20)
-        self.unit_1_level_label = Label(self.unit_1_label_frame, text = "Level: None", width=20)
-        self.unit_1_job_label = Label(self.unit_1_label_frame, text = "Class: None", width=20)
-        self.unit_1_hp_label = Label(self.unit_1_label_frame, text = "Hp: None", width=20)
-        self.unit_1_str_label = Label(self.unit_1_label_frame, text = "Str: None", width=20)
-        self.unit_1_skl_label = Label(self.unit_1_label_frame, text = "Skl: None", width=20)
-        self.unit_1_spd_label = Label(self.unit_1_label_frame, text = "Spd: None", width=20)
-        self.unit_1_lck_label = Label(self.unit_1_label_frame, text = "Lck: None", width=20)
-        self.unit_1_defence_label = Label(self.unit_1_label_frame, text = "Def: None", width=20)
-        self.unit_1_res_label = Label(self.unit_1_label_frame, text = "Res: None", width=20)
-        self.unit_1_con_label = Label(self.unit_1_label_frame, text = "Con: None", width=20)
-        self.unit_1_type_1_label = Label(self.unit_1_label_frame, text = "Type 1: None", width=20)
-        self.unit_1_type_2_label = Label(self.unit_1_label_frame, text = "Type 2: None", width=20)
-        self.unit_1_weapon_label = Label(self.unit_1_label_frame, text = "Weapon: None", width=20)
-        self.unit_1_weapon_mt_label = Label(self.unit_1_label_frame, text = "Mt: None", width=20)
-        self.unit_1_weapon_wt_label = Label(self.unit_1_label_frame, text = "Wt: None", width=20)
-        self.unit_1_weapon_hit_label = Label(self.unit_1_label_frame, text = "Hit: None", width=20)
-        self.unit_1_weapon_crt_label = Label(self.unit_1_label_frame, text = "Crt: None", width=20)
-        self.unit_1_weapon_effective_against_label = Label(self.unit_1_label_frame, text = "Effective: None", width=20)
-        self.unit_1_terrain_type_label = Label(self.unit_1_label_frame, text = "Terrain: None", width=20)
-        self.unit_1_terrain_def_label = Label(self.unit_1_label_frame, text = "Def Bonus: None", width=20)
-        self.unit_1_terrain_avoid_label = Label(self.unit_1_label_frame, text = "Avoid Bonus: None", width=20)
-        self.unit_1_level_up_label = Label(self.unit_1_button_frame, text = "Level Up to Level:", width=20)
-        self.unit_1_battle_label = Label(self.unit_1_label_frame, text = "Battle Stats", font=('', 12, 'bold'), width=20)
-        self.unit_1_damage_label = Label(self.unit_1_label_frame, text = "Damage: Calculating", width=20)
-        self.unit_1_hit_label = Label(self.unit_1_label_frame, text = "Hit Rate: Calculating", width=20)
-        self.unit_1_crit_label = Label(self.unit_1_label_frame, text = "Crit Chance: Calculating", width=20)
+        self.unit_1_label = Label(self.unit_1_label_frame, text = "Attacking Unit", font=('', 12, 'bold'), width=21)
+        self.unit_1_name_label = Label(self.unit_1_label_frame, text = "Name: None", width=21)
+        self.unit_1_level_label = Label(self.unit_1_label_frame, text = "Level: None", width=21)
+        self.unit_1_job_label = Label(self.unit_1_label_frame, text = "Class: None", width=21)
+        self.unit_1_hp_label = Label(self.unit_1_label_frame, text = "Hp: None", width=21)
+        self.unit_1_str_label = Label(self.unit_1_label_frame, text = "Str: None", width=21)
+        self.unit_1_skl_label = Label(self.unit_1_label_frame, text = "Skl: None", width=21)
+        self.unit_1_spd_label = Label(self.unit_1_label_frame, text = "Spd: None", width=21)
+        self.unit_1_lck_label = Label(self.unit_1_label_frame, text = "Lck: None", width=21)
+        self.unit_1_defence_label = Label(self.unit_1_label_frame, text = "Def: None", width=21)
+        self.unit_1_res_label = Label(self.unit_1_label_frame, text = "Res: None", width=21)
+        self.unit_1_con_label = Label(self.unit_1_label_frame, text = "Con: None", width=21)
+        self.unit_1_type_1_label = Label(self.unit_1_label_frame, text = "Type 1: None", width=21)
+        self.unit_1_type_2_label = Label(self.unit_1_label_frame, text = "Type 2: None", width=21)
+        self.unit_1_weapon_label = Label(self.unit_1_label_frame, text = "Weapon: None", width=21)
+        self.unit_1_weapon_mt_label = Label(self.unit_1_label_frame, text = "Mt: None", width=21)
+        self.unit_1_weapon_wt_label = Label(self.unit_1_label_frame, text = "Wt: None", width=21)
+        self.unit_1_weapon_hit_label = Label(self.unit_1_label_frame, text = "Hit: None", width=21)
+        self.unit_1_weapon_crt_label = Label(self.unit_1_label_frame, text = "Crt: None", width=21)
+        self.unit_1_weapon_effective_against_label = Label(self.unit_1_label_frame, text = "Effective: None", width=21)
+        self.unit_1_terrain_type_label = Label(self.unit_1_label_frame, text = "Terrain: None", width=21)
+        self.unit_1_terrain_def_label = Label(self.unit_1_label_frame, text = "Def Bonus: None", width=21)
+        self.unit_1_terrain_avoid_label = Label(self.unit_1_label_frame, text = "Avoid Bonus: None", width=21)
+        self.unit_1_level_up_label = Label(self.unit_1_button_frame, text = "Level Up to Level:", width=21)
+        self.unit_1_battle_label = Label(self.unit_1_label_frame, text = "Battle Stats", font=('', 12, 'bold'), width=21)
+        self.unit_1_damage_label = Label(self.unit_1_label_frame, text = "Damage: Calculating", width=21)
+        self.unit_1_hit_label = Label(self.unit_1_label_frame, text = "Hit Rate: Calculating", width=21)
+        self.unit_1_crit_label = Label(self.unit_1_label_frame, text = "Crit Chance: Calculating", width=21)
+        self.unit_1_attack_speed_label = Label(self.unit_1_label_frame, text = "Attack Speed: Calculating", width=21)
 
-        self.unit_2_label = Label(self.unit_2_label_frame, text = "Defending Unit", font=('', 12, 'bold'), width=20)
-        self.unit_2_name_label = Label(self.unit_2_label_frame, text = "Name: None", width=20)
-        self.unit_2_level_label = Label(self.unit_2_label_frame, text = "Level: None", width=20)
-        self.unit_2_job_label = Label(self.unit_2_label_frame, text = "Class: None", width=20)
-        self.unit_2_hp_label = Label(self.unit_2_label_frame, text = "Hp: None", width=20)
-        self.unit_2_str_label = Label(self.unit_2_label_frame, text = "Str: None", width=20)
-        self.unit_2_skl_label = Label(self.unit_2_label_frame, text = "Skl: None", width=20)
-        self.unit_2_spd_label = Label(self.unit_2_label_frame, text = "Spd: None", width=20)
-        self.unit_2_lck_label = Label(self.unit_2_label_frame, text = "Lck: None", width=20)
-        self.unit_2_defence_label = Label(self.unit_2_label_frame, text = "Def: None", width=20)
-        self.unit_2_res_label = Label(self.unit_2_label_frame, text = "Res: None", width=20)
-        self.unit_2_con_label = Label(self.unit_2_label_frame, text = "Con: None", width=20)
-        self.unit_2_type_1_label = Label(self.unit_2_label_frame, text = "Type 1: None", width=20)
-        self.unit_2_type_2_label = Label(self.unit_2_label_frame, text = "Type 2: None", width=20)
-        self.unit_2_weapon_label = Label(self.unit_2_label_frame, text = "Weapon: None", width=20)
-        self.unit_2_weapon_mt_label = Label(self.unit_2_label_frame, text = "Mt: None", width=20)
-        self.unit_2_weapon_wt_label = Label(self.unit_2_label_frame, text = "Wt: None", width=20)
-        self.unit_2_weapon_hit_label = Label(self.unit_2_label_frame, text = "Hit: None", width=20)
-        self.unit_2_weapon_crt_label = Label(self.unit_2_label_frame, text = "Crt: None", width=20)
-        self.unit_2_weapon_effective_against_label = Label(self.unit_2_label_frame, text = "Effective: None", width=20)
-        self.unit_2_terrain_type_label = Label(self.unit_2_label_frame, text = "Terrain: None", width=20)
-        self.unit_2_terrain_def_label = Label(self.unit_2_label_frame, text = "Def Bonus: None", width=20)
-        self.unit_2_terrain_avoid_label = Label(self.unit_2_label_frame, text = "Avoid Bonus: None", width=20)
-        self.unit_2_level_up_label = Label(self.unit_2_button_frame, text = "Level Up to Level:", width=20)
-        self.unit_2_battle_label = Label(self.unit_2_label_frame, text = "Battle Stats", font=('', 12, 'bold'), width=20)
-        self.unit_2_damage_label = Label(self.unit_2_label_frame, text = "Damage: Calculating", width=20)
-        self.unit_2_hit_label = Label(self.unit_2_label_frame, text = "Hit Rate: Calculating", width=20)
-        self.unit_2_crit_label = Label(self.unit_2_label_frame, text = "Crit Chance: Calculating", width=20)
+        self.unit_2_label = Label(self.unit_2_label_frame, text = "Defending Unit", font=('', 12, 'bold'), width=21)
+        self.unit_2_name_label = Label(self.unit_2_label_frame, text = "Name: None", width=21)
+        self.unit_2_level_label = Label(self.unit_2_label_frame, text = "Level: None", width=21)
+        self.unit_2_job_label = Label(self.unit_2_label_frame, text = "Class: None", width=21)
+        self.unit_2_hp_label = Label(self.unit_2_label_frame, text = "Hp: None", width=21)
+        self.unit_2_str_label = Label(self.unit_2_label_frame, text = "Str: None", width=21)
+        self.unit_2_skl_label = Label(self.unit_2_label_frame, text = "Skl: None", width=21)
+        self.unit_2_spd_label = Label(self.unit_2_label_frame, text = "Spd: None", width=21)
+        self.unit_2_lck_label = Label(self.unit_2_label_frame, text = "Lck: None", width=21)
+        self.unit_2_defence_label = Label(self.unit_2_label_frame, text = "Def: None", width=21)
+        self.unit_2_res_label = Label(self.unit_2_label_frame, text = "Res: None", width=21)
+        self.unit_2_con_label = Label(self.unit_2_label_frame, text = "Con: None", width=21)
+        self.unit_2_type_1_label = Label(self.unit_2_label_frame, text = "Type 1: None", width=21)
+        self.unit_2_type_2_label = Label(self.unit_2_label_frame, text = "Type 2: None", width=21)
+        self.unit_2_weapon_label = Label(self.unit_2_label_frame, text = "Weapon: None", width=21)
+        self.unit_2_weapon_mt_label = Label(self.unit_2_label_frame, text = "Mt: None", width=21)
+        self.unit_2_weapon_wt_label = Label(self.unit_2_label_frame, text = "Wt: None", width=21)
+        self.unit_2_weapon_hit_label = Label(self.unit_2_label_frame, text = "Hit: None", width=21)
+        self.unit_2_weapon_crt_label = Label(self.unit_2_label_frame, text = "Crt: None", width=21)
+        self.unit_2_weapon_effective_against_label = Label(self.unit_2_label_frame, text = "Effective: None", width=21)
+        self.unit_2_terrain_type_label = Label(self.unit_2_label_frame, text = "Terrain: None", width=21)
+        self.unit_2_terrain_def_label = Label(self.unit_2_label_frame, text = "Def Bonus: None", width=21)
+        self.unit_2_terrain_avoid_label = Label(self.unit_2_label_frame, text = "Avoid Bonus: None", width=21)
+        self.unit_2_level_up_label = Label(self.unit_2_button_frame, text = "Level Up to Level:", width=21)
+        self.unit_2_battle_label = Label(self.unit_2_label_frame, text = "Battle Stats", font=('', 12, 'bold'), width=21)
+        self.unit_2_damage_label = Label(self.unit_2_label_frame, text = "Damage: Calculating", width=21)
+        self.unit_2_hit_label = Label(self.unit_2_label_frame, text = "Hit Rate: Calculating", width=21)
+        self.unit_2_crit_label = Label(self.unit_2_label_frame, text = "Crit Chance: Calculating", width=21)
+        self.unit_2_attack_speed_label = Label(self.unit_2_label_frame, text = "Attack Speed: Calculating", width=21)
 
         # Pack all buttons & labels into grid
 
@@ -241,6 +247,7 @@ class Window:
             "damage_label": {'label': self.unit_1_damage_label, 'row': 7, 'column': 0, 'padx': 5, 'pady': 5},
             "hit_rate_label": {'label': self.unit_1_hit_label, 'row': 8, 'column': 0, 'padx': 5, 'pady': 5},
             "crit_rate_label": {'label': self.unit_1_crit_label, 'row': 9, 'column': 0, 'padx': 5, 'pady': 5},
+            "attack_speed_label": {'label': self.unit_1_attack_speed_label, 'row': 10, 'column': 0, 'padx': 5, 'pady': 5},
         }
 
         for button_info in self.unit_1_buttons_combobox.values():
@@ -308,6 +315,7 @@ class Window:
             "damage_label": {'label': self.unit_2_damage_label, 'row': 7, 'column': 1, 'padx': 5, 'pady': 5},
             "hit_rate_label": {'label': self.unit_2_hit_label, 'row': 8, 'column': 1, 'padx': 5, 'pady': 5},
             "crit_rate_label": {'label': self.unit_2_crit_label, 'row': 9, 'column': 1, 'padx': 5, 'pady': 5},
+            "attack_speed_label": {'label': self.unit_2_attack_speed_label, 'row': 10, 'column': 1, 'padx': 5, 'pady': 5},
         }
 
         for button_info in self.unit_2_buttons_combobox.values():
@@ -435,10 +443,11 @@ class Window:
         self.calculate_battle_stats()
         self.update_unit_display()
 
-    def apply_promotion(self, unit, promotion_clicked, promotion_combobox):
+    def apply_promotion(self, unit, promotion_clicked, promotion_combobox, weapon_combobox):
         target_job = promotion_clicked.get()
         unit.promote(target_job, self.battle_window)
         self.update_promotions_list(unit, promotion_combobox)
+        self.update_weapons_list(unit, weapon_combobox)
         self.calculate_battle_stats()
         self.update_unit_display()
 
@@ -502,6 +511,8 @@ class Window:
                 self.unit_1_hit_label.config(text = "Hit Rate: " + str(self.unit_1.hit_rate))
             if self.unit_1.crit_rate is not None:
                 self.unit_1_crit_label.config(text = "Crit Rate: " + str(self.unit_1.crit_rate))
+            if self.unit_1_attack_speed is not None:
+                self.unit_1_attack_speed_label.config(text = "Attack Speed: " + str(self.unit_1_attack_speed))
 
         
         if self.unit_2 is not None:
@@ -549,6 +560,8 @@ class Window:
                 self.unit_2_hit_label.config(text = "Hit Rate: " + str(self.unit_2.hit_rate))
             if self.unit_2.crit_rate is not None:
                 self.unit_2_crit_label.config(text = "Crit Rate: " + str(self.unit_2.crit_rate))
+            if self.unit_2_attack_speed is not None:
+                self.unit_2_attack_speed_label.config(text = "Attack Speed: " + str(self.unit_2_attack_speed))
 
         if self.unit_1 is not None and self.unit_2 is not None:
             if self.unit_1.weapon is not None and self.unit_1.terrain is not None and self.unit_2.weapon is not None and self.unit_2.terrain is not None:
@@ -558,9 +571,11 @@ class Window:
                 self.unit_1_damage_label.config(text = "Damage: Calculating")
                 self.unit_1_hit_label.config(text = "Hit Rate: Calculating")
                 self.unit_1_crit_label.config(text = "Crit Chance: Calculating")
+                self.unit_1_attack_speed_label.config(text = "Attack Speed: Calculating")
                 self.unit_2_damage_label.config(text = "Damage: Calculating")
                 self.unit_2_hit_label.config(text = "Hit Rate: Calculating")
                 self.unit_2_crit_label.config(text = "Crit Chance: Calculating")
+                self.unit_2_attack_speed_label.config(text = "Attack Speed: Calculating")
                 
 
     def update_weapons_list(self, unit, weapon_combobox = None):
@@ -586,8 +601,8 @@ class Window:
             if self.unit_1.weapon is not None and self.unit_1.terrain is not None and self.unit_2.weapon is not None and self.unit_2.terrain is not None:
                 
                 # Calculate damage
-                self.unit_1.calculate_damage(self.unit_2)
-                self.unit_2.calculate_damage(self.unit_1)
+                self.unit_1.calculate_damage(self.unit_2, self.battle_window)
+                self.unit_2.calculate_damage(self.unit_1, self.battle_window)
 
                 # Calculate hit rate
                 self.unit_1.calculate_hit(self.unit_2)
@@ -596,8 +611,11 @@ class Window:
                 # Calculate crit rate
                 self.unit_1.calculate_critical()
                 self.unit_2.calculate_critical()
-            
 
+                # Calculate attack speed
+                self.unit_1_attack_speed = self.unit_1.calculate_attack_speed()
+                self.unit_2_attack_speed = self.unit_2.calculate_attack_speed()
+            
 
     def start_unit_battle(self):   
         self.battle_button.config(text="Battling...", state="disabled")
