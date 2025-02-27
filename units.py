@@ -180,6 +180,8 @@ class Unit:
 
     def attack(self, target, battle_window):
         hit = False
+        great_shield_active = False
+        crit = False
 
         if self.job.class_skill == "Sure Strike":
             activation_chance = self.level
@@ -195,66 +197,74 @@ class Unit:
             hit = self.calculate_hit(target)     
 
         if hit == True:
+            damage = self.damage
 
-            if self.calculate_critical():
+            crit = self.calculate_critical()
+            
+            if crit == True:
                 battle_window.insert(tk.END, "Critical Hit!\n")
                 battle_window.see(tk.END)
-                self.damage *= 3
+                damage *= 3          
 
-            damage = self.damage
+            if target.job.class_skill == "Great Shield":
+                shield_chance = self.level
+                shield_trigger = self.rng()
+                if shield_trigger < shield_chance:
+                    damage = 0
+                    battle_window.insert(tk.END, f"{target.name} activates Great Shield!\n")
+                    battle_window.see(tk.END)
+                    great_shield_active = True
+                    target.hp -= damage
 
             if self.weapon.other_effect == "Devil":
                 backfire_chance = 31 - self.lck
                 backfire_activation = self.rng()
                 if backfire_activation < backfire_chance:
                     battle_window.insert(tk.END, f"{self.weapon.name} backfires!\n")
-                    battle_window.insert(tk.END, f"Damage: {self.damage}\n")
-                    battle_window.see(tk.END)
-                    self.hp -= self.damage
-                    battle_window.insert(tk.END, f"{self.name}'s HP: {self.hp}\n")
+                    if crit == True:
+                        battle_window.insert(tk.END, f"Damage: {self.damage * 3}\n")
+                        battle_window.see(tk.END)
+                        self.hp -= self.damage * 3
+                        battle_window.insert(tk.END, f"{self.name}'s HP: {self.hp}\n")
+                    else:
+                        battle_window.insert(tk.END, f"Damage: {self.damage}\n")
+                        battle_window.see(tk.END)
+                        self.hp -= self.damage
+                        battle_window.insert(tk.END, f"{self.name}'s HP: {self.hp}\n")
                 else:
-                    battle_window.insert(tk.END, f"Damage: {self.damage}\n")
+                    battle_window.insert(tk.END, f"Damage: {damage}\n")
                     battle_window.see(tk.END)
-                    target.hp -= self.damage
+                    target.hp -= damage
 
             elif self.weapon.other_effect == "Halve HP":
                 battle_window.insert(tk.END, f"{self.weapon.name} halves {target.name}'s hp\n")
-                battle_window.insert(tk.END, f"Damage: {self.damage}\n")
-                battle_window.see(tk.END)
-                target.hp = target.hp // 2
+                if great_shield_active == True:
+                    battle_window.insert(tk.END, f"Damage: {damage}\n")
+                    battle_window.see(tk.END)
+                else:
+                    battle_window.insert(tk.END, f"Damage: {target.hp // 2}\n")
+                    battle_window.see(tk.END)
+                    target.hp = target.hp // 2
 
             elif self.job.class_skill == "Pierce":
                 pierce_chance = self.level
                 pierce_trigger = self.rng()
                 if pierce_trigger < pierce_chance:
-                    damage = self.damage + target.defence
+                    if great_shield_active == False:
+                        damage += target.defence
                     battle_window.insert(tk.END, f"{self.name} activates Pierce!\n")
                     battle_window.insert(tk.END, f"Damage: {damage}\n")
                     battle_window.see(tk.END)
                     target.hp -= damage
                 else:
-                    battle_window.insert(tk.END, f"Damage: {self.damage}\n")
-                    battle_window.see(tk.END)
-                    target.hp -= self.damage
-            
-            elif target.job.class_skill == "Great Shield":
-                shield_chance = self.level
-                shield_trigger = self.rng()
-                if shield_trigger < shield_chance:
-                    damage = 0
-                    battle_window.insert(tk.END, f"{target.name} activates Great Shield!\n")
                     battle_window.insert(tk.END, f"Damage: {damage}\n")
                     battle_window.see(tk.END)
                     target.hp -= damage
-                else:
-                    battle_window.insert(tk.END, f"Damage: {self.damage}\n")
-                    battle_window.see(tk.END)
-                    target.hp -= self.damage
-            
+                        
             else:
-                battle_window.insert(tk.END, f"Damage: {self.damage}\n")
+                battle_window.insert(tk.END, f"Damage: {damage}\n")
                 battle_window.see(tk.END)
-                target.hp -= self.damage
+                target.hp -= damage
 
             if self.weapon.other_effect == "Lifesteal":
                 self.hp += self.damage
