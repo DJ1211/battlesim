@@ -51,7 +51,7 @@ Devil Axe,18,18,55,0,axe,None,False,False,Devil
 Hand Axe,12,7,60,0,axe,None,False,False,None
 Tomahawk,14,13,65,0,axe,None,False,False,None
 Swordreaver,13,11,65,5,axe,None,False,True,None
-Swordslayer,13,11,80,5,axe,sword,False,True,None
+Swordslayer,13,11,80,5,axe,Swordsman,False,True,None
 Hatchet,5,4,85,0,axe,None,False,False,None
 Dragon Axe,11,12,60,0,axe,Dragon,False,False,None
 Fiendcleaver,10,8,75,5,axe,Monster,False,False,None

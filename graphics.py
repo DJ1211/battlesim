@@ -1,4 +1,4 @@
-from tkinter import Tk, BOTH, Frame, Canvas, Button, StringVar, OptionMenu, Label, ttk, IntVar, Checkbutton, Entry
+from tkinter import Tk, BOTH, Frame, Canvas, Button, StringVar, OptionMenu, Label, ttk, IntVar, Checkbutton, Entry, END
 from tkinter.scrolledtext import ScrolledText
 from dicts import units, jobs, weapons, terrain
 from units import Unit
@@ -365,6 +365,12 @@ class Window:
 
     def select_unit_1(self):
         unit = self.unit_1_clicked.get()
+
+        if unit == "Select a Unit" or not unit:
+            self.battle_window.insert(END, "Please select a Unit\n")
+            self.battle_window.see(END)
+            return
+        
         self.unit_1 = Unit(units[unit])
         self.unit_1.weapon = None
         self.unit_1.terrain = None
@@ -396,6 +402,12 @@ class Window:
 
     def select_unit_2(self):
         unit = self.unit_2_clicked.get()
+
+        if unit == "Select a Unit" or not unit:
+            self.battle_window.insert(END, "Please select a Unit\n")
+            self.battle_window.see(END)
+            return
+        
         self.unit_2 = Unit(units[unit])
         self.unit_2.weapon = None
         self.unit_2.terrain = None
@@ -426,8 +438,14 @@ class Window:
             self.unit_2_job_button.grid_remove()
 
 
-    def apply_job(self, unit, job_clicked, weapon_combobox, promotions_combobox):
+    def apply_job(self, unit, job_clicked, weapon_combobox, promotions_combobox):        
         job = job_clicked.get()
+
+        if job == "Select a Class" or not job:
+            self.battle_window.insert(END, "Please select a Class\n")
+            self.battle_window.see(END)
+            return
+        
         unit_job = jobs[job]
         unit.assign_job(unit_job)
         unit.weapon = None
@@ -438,6 +456,12 @@ class Window:
     
     def apply_weapon(self, unit, weapon_clicked):
         weapon = weapon_clicked.get()
+
+        if weapon == "Select a Weapon" or not weapon:
+            self.battle_window.insert(END, "Please select a Weapon\n")
+            self.battle_window.see(END)
+            return
+        
         unit_weapon = weapons[weapon]
         unit.assign_weapon(unit_weapon, self.battle_window)
         self.calculate_battle_stats()
@@ -445,6 +469,12 @@ class Window:
 
     def apply_promotion(self, unit, promotion_clicked, promotion_combobox, weapon_combobox):
         target_job = promotion_clicked.get()
+
+        if target_job == "Choose a Promotion" or not target_job:
+            self.battle_window.insert(END, "Please choose a Promotion\n")
+            self.battle_window.see(END)
+            return
+        
         unit.promote(target_job, self.battle_window)
         self.update_promotions_list(unit, promotion_combobox)
         self.update_weapons_list(unit, weapon_combobox)
@@ -453,6 +483,12 @@ class Window:
 
     def apply_level_up(self, unit, level_var):
         target_level = level_var.get()
+
+        if not target_level:
+            self.battle_window.insert(END, "Please enter a Level\n")
+            self.battle_window.see(END)
+            return
+        
         unit.set_level(self.battle_window, int(target_level))
         level_var.set("")
         self.calculate_battle_stats()
@@ -460,6 +496,12 @@ class Window:
 
     def apply_terrain(self, unit, terrain_clicked):
         terrain_selection = terrain_clicked.get()
+
+        if terrain_selection == "Choose Unit" or not terrain_selection:
+            self.battle_window.insert(END, "Please select a Unit\n")
+            self.battle_window.see(END)
+            return
+        
         unit_terrain = terrain[terrain_selection]
         unit.assign_terrain(unit_terrain)
         self.calculate_battle_stats()
@@ -618,7 +660,7 @@ class Window:
             
 
     def start_unit_battle(self):   
-        self.battle_button.config(text="Battling...", state="disabled")
+        self.disable_buttons()
         
         # Set starting HP values so battle can be restarted
         if self.unit_1_starting_hp < self.unit_1.hp:
@@ -638,5 +680,59 @@ class Window:
         
         self.update_unit_display()
 
-        battle = Battle(self.unit_1, self.unit_2, self.battle_window, self.battle_button, self)
+        battle = Battle(self.unit_1, self.unit_2, self.battle_window, self)
         battle.start_battle()
+
+    def disable_buttons(self):
+        self.battle_button.config(text="Battling...", state="disabled")
+        self.unit_1_button.config(state="disabled")
+        self.unit_1_job_button.config(state="disabled")
+        self.unit_1_promotions_button.config(state="disabled")
+        self.unit_1_level_up_sub_btn.config(state="disabled")
+        self.unit_1_weapon_button.config(state="disabled")
+        self.unit_1_checkbutton.config(state="disabled")
+        self.unit_1_terrain_button.config(state="disabled")
+        self.combo_unit_1.config(state="disabled")
+        self.combo_unit_1_job.config(state="disabled")
+        self.combo_unit_1_promotions.config(state="disabled")
+        self.combo_unit_1_terrain.config(state="disabled")
+        self.combo_unit_1_weapon.config(state="disabled")
+        self.unit_2_button.config(state="disabled")
+        self.unit_2_job_button.config(state="disabled")
+        self.unit_2_promotions_button.config(state="disabled")
+        self.unit_2_level_up_sub_btn.config(state="disabled")
+        self.unit_2_weapon_button.config(state="disabled")
+        self.unit_2_checkbutton.config(state="disabled")
+        self.unit_2_terrain_button.config(state="disabled")
+        self.combo_unit_2.config(state="disabled")
+        self.combo_unit_2_job.config(state="disabled")
+        self.combo_unit_2_promotions.config(state="disabled")
+        self.combo_unit_2_terrain.config(state="disabled")
+        self.combo_unit_2_weapon.config(state="disabled")
+
+    def enable_buttons(self):
+        self.battle_button.config(text="Battle!", state="normal")
+        self.unit_1_button.config(state="normal")
+        self.unit_1_job_button.config(state="normal")
+        self.unit_1_promotions_button.config(state="normal")
+        self.unit_1_level_up_sub_btn.config(state="normal")
+        self.unit_1_weapon_button.config(state="normal")
+        self.unit_1_checkbutton.config(state="normal")
+        self.unit_1_terrain_button.config(state="normal")
+        self.combo_unit_1.config(state="normal")
+        self.combo_unit_1_job.config(state="normal")
+        self.combo_unit_1_promotions.config(state="normal")
+        self.combo_unit_1_terrain.config(state="normal")
+        self.combo_unit_1_weapon.config(state="normal")
+        self.unit_2_button.config(state="normal")
+        self.unit_2_job_button.config(state="normal")
+        self.unit_2_promotions_button.config(state="normal")
+        self.unit_2_level_up_sub_btn.config(state="normal")
+        self.unit_2_weapon_button.config(state="normal")
+        self.unit_2_checkbutton.config(state="normal")
+        self.unit_2_terrain_button.config(state="normal")
+        self.combo_unit_2.config(state="normal")
+        self.combo_unit_2_job.config(state="normal")
+        self.combo_unit_2_promotions.config(state="normal")
+        self.combo_unit_2_terrain.config(state="normal")
+        self.combo_unit_2_weapon.config(state="normal")

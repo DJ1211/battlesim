@@ -142,7 +142,7 @@ class Unit:
     def calculate_critical(self):
         crit_chance = self.rng()
         crit_rate = self.weapon.crt + (self.skl // 2)
-        if self.job.class_skill == "crit":
+        if self.job.class_skill == "Crit":
             crit_rate += 15
 
         self.crit_rate = crit_rate
@@ -202,19 +202,31 @@ class Unit:
             crit = self.calculate_critical()
             
             if crit == True:
-                battle_window.insert(tk.END, "Critical Hit!\n")
-                battle_window.see(tk.END)
-                damage *= 3          
+                if self.job.class_skill == "Silencer":
+                    activation_chance = 50
+                    activation_trigger = self.rng()
+                    if activation_trigger < activation_chance:
+                        battle_window.insert(tk.END, f"{self.name} activates Silencer!\n")
+                        battle_window.see(tk.END)
+                        target.hp = 0
+                    else:    
+                        battle_window.insert(tk.END, "Critical Hit!\n")
+                        battle_window.see(tk.END)
+                        damage *= 3      
+                else:
+                    battle_window.insert(tk.END, "Critical Hit!\n")
+                    battle_window.see(tk.END)
+                    damage *= 3          
 
             if target.job.class_skill == "Great Shield":
-                shield_chance = self.level
+                shield_chance = 100
                 shield_trigger = self.rng()
                 if shield_trigger < shield_chance:
                     damage = 0
                     battle_window.insert(tk.END, f"{target.name} activates Great Shield!\n")
                     battle_window.see(tk.END)
                     great_shield_active = True
-                    target.hp -= damage
+                    
 
             if self.weapon.other_effect == "Devil":
                 backfire_chance = 31 - self.lck

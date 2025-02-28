@@ -25,25 +25,43 @@ class Weapon:
         # +15 accuracy for advantage, -15 for disadvantage
         if self.type == "sword":
             if target.type == "axe":
-                return self.hit + 15
+                if self.triangle_inverted == True: 
+                    return self.hit + 30
+                else:
+                    return self.hit + 15
             elif target.type == "lance":
-                return self.hit - 15
+                if self.triangle_inverted == True: 
+                    return self.hit - 30
+                else:
+                    return self.hit - 15
             else:
                 return self.hit
 
         if self.type == "axe":
             if target.type == "lance":
-                return self.hit + 15
+                if self.triangle_inverted == True: 
+                    return self.hit + 30
+                else:
+                    return self.hit + 15
             elif target.type == "sword":
-                return self.hit - 15
+                if self.triangle_inverted == True: 
+                    return self.hit - 30
+                else:
+                    return self.hit - 15
             else:
                 return self.hit
         
         if self.type == "lance":
             if target.type == "sword":
-                return self.hit + 15
+                if self.triangle_inverted == True: 
+                    return self.hit + 30
+                else:
+                    return self.hit + 15
             elif target.type == "axe":
-                return self.hit - 15
+                if self.triangle_inverted == True: 
+                    return self.hit - 30
+                else:
+                    return self.hit - 15
             else:
                 return self.hit
         
