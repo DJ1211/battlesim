@@ -92,10 +92,10 @@ Mauthe Doog,16,4,10,10,2,0,6,60,20,20,20,30,20,20,0,0,0,0,0,0,0,20,monster,None,
 Gwyllgi,21,6,12,12,5,2,8,60,24,29,30,30,22,23,0,0,0,0,0,0,0,20,monster,None,Monster,None,None
 Tarvos,21,6,2,5,7,0,10,60,20,20,20,30,20,20,0,0,0,0,0,0,0,20,axe,None,Monster,Cavalry,Maelduin
 Maelduin,25,8,4,7,9,3,12,60,25,26,24,30,25,25,0,0,0,0,0,0,0,20,"axe, bow",None,Monster,Cavalry,None
-Mogall,15,2,1,2,2,4,4,60,20,20,20,30,20,20,0,0,0,0,0,0,0,20,monster,None,Monster,Flying,Arch Mogall
-Arch Mogall,17,6,3,3,3,7,5,60,29,26,26,30,20,29,0,0,0,0,0,0,0,20,monster,None,Monster,Flying,None
-Gorgon,19,8,3,4,5,7,11,60,29,26,26,30,21,28,0,0,0,0,0,0,0,20,monster,None,Monster,None,None
+Mogall,15,2,1,2,2,4,4,60,20,20,20,30,20,20,0,0,0,0,0,0,0,20,monster_magic,None,Monster,Flying,Arch Mogall
+Arch Mogall,17,6,3,3,3,7,5,60,29,26,26,30,20,29,0,0,0,0,0,0,0,20,monster_maguc,None,Monster,Flying,None
+Gorgon,19,8,3,4,5,7,11,60,29,26,26,30,21,28,0,0,0,0,0,0,0,20,monster_magic,None,Monster,None,None
 Gargoyle,19,6,3,6,6,0,8,60,20,20,20,30,20,20,0,0,0,0,0,0,0,20,lance,None,Monster,Flying,Deathgoyle
 Deathgoyle,23,8,5,8,9,1,11,60,27,25,23,30,28,22,0,0,0,0,0,0,0,20,lance,None,Monster,Flying,None
 Draco Zombie,53,1,0,1,0,3,25,60,50,50,50,30,50,50,0,0,0,0,0,0,0,20,monster,None,Monster,Dragon,None
-Demon King,60,23,20,18,25,25,25,60,50,50,50,30,50,50,0,0,0,0,0,0,0,20,monster,None,Monster,None,None
+Demon King,60,23,20,18,25,25,25,60,50,50,50,30,50,50,0,0,0,0,0,0,0,20,boss,None,Monster,None,None
